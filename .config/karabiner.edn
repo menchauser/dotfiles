@@ -1,0 +1,54 @@
+{
+    ;; !  | means mandatory
+    ;; #  | means optional
+    ;; !! | mandatory command + control + optional + shift (hyper)
+    ;; ## | optional any
+
+    ;; to understand better how modifiers work in karabiner
+    ;; karabiner definition of mandatory and optional
+    ;; https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/from/modifiers/
+
+    ;; C  | left_command
+    ;; T  | left_control
+    ;; O  | left_option
+    ;; S  | left_shift
+    ;; F  | fn
+    ;; Q  | right_command
+    ;; W  | right_control
+    ;; E  | right_option
+    ;; R  | right_shift
+    ;; need to prefix C T O S F with ! or #
+
+    :profiles {:Default {:default true
+                         :sim   50 
+                         :delay 500
+                         :alone 1000
+                         :held  500 }}
+    
+    :applications {:emacs ["^org\\.gnu\\.Emacs$"]}
+
+    :main [{:des "Caps Lock to Control"
+            :rules [[:##caps_lock :left_control]]},
+
+           {:des "Ctrl + H to Backspace"
+            :rules [[:!T##h :delete_or_backspace [:!emacs]]]},
+           {:des "Disable Backspace Key"
+            :rules [[:delete_or_backspace :vk_none [:!emacs]]]}
+
+           {:des "Ctrl + I/J/K/L to Arrow Keys",
+            :rules [[:!T##i :up_arrow    [:!emacs]]
+                    [:!T##j :left_arrow  [:!emacs]]
+                    [:!T##k :down_arrow  [:!emacs]]
+                    [:!T##l :right_arrow [:!emacs]]]}
+           {:des "Disable Arrow Keys",
+            :rules [[:up_arrow    :vk_none]
+                    [:left_arrow  :vk_none]
+                    [:down_arrow  :vk_none]
+                    [:right_arrow :vk_none]]}
+            
+           {:des "Ctrl + ; to Enter"
+            :rules [[:!Tsemicolon :return_or_enter]]}
+        ;    {:des "Disable Enter Key"
+        ;     :rules [[:return_or_enter :vk_none]]}
+    ]
+}
