@@ -30,8 +30,11 @@
     :main [{:des "Caps Lock to Control"
             :rules [[:##caps_lock :left_control]]},
 
+           {:des "Cmd + H to Ctrl + H in Emacs"
+            :rules [[:!Ch :!Th [:emacs]]]}
+
            {:des "Ctrl + H to Backspace"
-            :rules [[:!T##h :delete_or_backspace [:!emacs]]]},
+            :rules [[:!T##h :delete_or_backspace]]},
            {:des "Disable Backspace Key"
             :rules [[:delete_or_backspace :vk_none [:!emacs]]]}
 
@@ -50,5 +53,8 @@
             :rules [[:!Tsemicolon :return_or_enter]]}
         ;    {:des "Disable Enter Key"
         ;     :rules [[:return_or_enter :vk_none]]}
+
+           {:des "Disable Minimize Key"
+            :rules [[:!Cm :vk_none]]}
     ]
 }
