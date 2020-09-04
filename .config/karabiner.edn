@@ -30,30 +30,27 @@
     :main [{:des "Caps Lock to Control"
             :rules [[:##caps_lock :left_control]]},
 
-           {:des "Cmd + H to Ctrl + H in Emacs"
-            :rules [[:!Ch :!Th [:emacs]]]}
-
            {:des "Ctrl + H to Backspace"
             :rules [[:!T##h :delete_or_backspace]]},
-           {:des "Disable Backspace Key"
-            :rules [[:delete_or_backspace :vk_none [:!emacs]]]}
-
+           {:des "Cmd + H to Ctrl + H in Emacs"
+            :rules [[:!Ch :!Th [:emacs]]]}
+           
            {:des "Ctrl + I/J/K/L to Arrow Keys",
             :rules [[:!T##i :up_arrow    [:!emacs]]
                     [:!T##j :left_arrow  [:!emacs]]
                     [:!T##k :down_arrow  [:!emacs]]
                     [:!T##l :right_arrow [:!emacs]]]}
-           {:des "Disable Arrow Keys",
-            :rules [[:up_arrow    :vk_none]
-                    [:left_arrow  :vk_none]
-                    [:down_arrow  :vk_none]
-                    [:right_arrow :vk_none]]}
             
            {:des "Ctrl + ; to Enter"
             :rules [[:!Tsemicolon :return_or_enter]]}
-        ;    {:des "Disable Enter Key"
-        ;     :rules [[:return_or_enter :vk_none]]}
 
+           {:des "Disable Backspace Key"
+            :rules [[:delete_or_backspace :vk_none [:!emacs]]]}
+           {:des "Disable Arrow Keys",
+            :rules [[:up_arrow    :vk_none [:!emacs]]
+                    [:left_arrow  :vk_none [:!emacs]]
+                    [:down_arrow  :vk_none [:!emacs]]
+                    [:right_arrow :vk_none [:!emacs]]]}
            {:des "Disable Minimize Key"
             :rules [[:!Cm :vk_none]]}
     ]
