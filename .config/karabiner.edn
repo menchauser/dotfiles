@@ -27,6 +27,9 @@
     
     :applications {:emacs ["^org\\.gnu\\.Emacs$"]}
 
+    :input-sources {:en {:language "en"}
+                    :ru {:language "ru"}}
+
     :main [{:des "Caps Lock to Control"
             :rules [[:##caps_lock :left_control]]},
 
@@ -53,5 +56,9 @@
                     [:right_arrow :vk_none [:!emacs]]]}
            {:des "Disable Minimize Key"
             :rules [[:!Cm :vk_none]]}
+
+           {:des "Left CMD to EN, Right CMD to RU"
+            :rules [[:##left_command :left_command nil {:alone :en}]
+                    [:##right_command :right_command nil {:alone :ru}]]}
     ]
 }
