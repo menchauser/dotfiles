@@ -25,7 +25,10 @@
                          :alone 1000
                          :held  500 }}
     
-    :applications {:emacs ["^org\\.gnu\\.Emacs$"]}
+    :applications {
+            :emacs ["^org\\.gnu\\.Emacs$"]
+            :rdp ["^com\\.microsoft\\.rdc\\.macos$"]
+    }
 
     :input-sources {:en {:language "en"}
                     :ru {:language "ru"}}
@@ -39,21 +42,21 @@
            ;;  :rules [[:!Ch :!Th [:emacs]]]}
            
            {:des "Ctrl + H/J/K/L to Arrow Keys",
-            :rules [[:!T##k :up_arrow    [:!emacs]]
-                    [:!T##h :left_arrow  [:!emacs]]
-                    [:!T##j :down_arrow  [:!emacs]]
-                    [:!T##l :right_arrow [:!emacs]]]}
+            :rules [[:!T##k :up_arrow    [:!emacs :!rdp]]
+                    [:!T##h :left_arrow  [:!emacs :!rdp]]
+                    [:!T##j :down_arrow  [:!emacs :!rdp]]
+                    [:!T##l :right_arrow [:!emacs :!rdp]]]}
             
            {:des "Ctrl + ; to Enter"
             :rules [[:!Tsemicolon :return_or_enter]]}
 
            {:des "Disable Backspace Key"
-            :rules [[:delete_or_backspace :vk_none [:!emacs]]]}
+            :rules [[:delete_or_backspace :vk_none [:!emacs :!rdp]]]}
            {:des "Disable Arrow Keys",
-            :rules [[:up_arrow    :vk_none [:!emacs]]
-                    [:left_arrow  :vk_none [:!emacs]]
-                    [:down_arrow  :vk_none [:!emacs]]
-                    [:right_arrow :vk_none [:!emacs]]]}
+            :rules [[:up_arrow    :vk_none [:!emacs :!rdp]]
+                    [:left_arrow  :vk_none [:!emacs :!rdp]]
+                    [:down_arrow  :vk_none [:!emacs :!rdp]]
+                    [:right_arrow :vk_none [:!emacs :!rdp]]]}
            {:des "Disable Minimize Key"
             :rules [[:!Cm :vk_none]]}
 
