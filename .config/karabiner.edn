@@ -24,6 +24,9 @@
                          :delay 500
                          :alone 1000
                          :held  500 }}
+
+    :devices {:mbp2019 [{:vendor_id 1452 :product_id 832 :is_keyboard true}] 
+              :chad    [{:vendor_id 65261 :product_id 12384 :is_keyboard true}]}
     
     :applications {
             :emacs ["^org\\.gnu\\.Emacs$"]
@@ -34,34 +37,34 @@
                     :ru {:language "ru"}}
 
     :main [{:des "Caps Lock to Control"
-            :rules [[:##caps_lock :left_control]]},
+            :rules [[:##caps_lock :left_control [:mbp2019]]]},
 
            {:des "Ctrl + I to Backspace"
-            :rules [[:!T##i :delete_or_backspace]]},
+            :rules [[:!T##i :delete_or_backspace [:mbp2019]]]},
            ;; {:des "Cmd + H to Ctrl + H in Emacs"
            ;;  :rules [[:!Ch :!Th [:emacs]]]}
            
            {:des "Ctrl + H/J/K/L to Arrow Keys",
-            :rules [[:!T##k :up_arrow    [:!emacs :!rdp]]
+            :rules [[:!T##k :up_arrow    [:mbp2019 :!emacs :!rdp]]
                     [:!T##h :left_arrow  [:!emacs :!rdp]]
                     [:!T##j :down_arrow  [:!emacs :!rdp]]
                     [:!T##l :right_arrow [:!emacs :!rdp]]]}
             
            {:des "Ctrl + ; to Enter"
-            :rules [[:!Tsemicolon :return_or_enter]]}
+            :rules [[:!Tsemicolon :return_or_enter [:mbp2019]]]}
 
            {:des "Disable Backspace Key"
-            :rules [[:delete_or_backspace :vk_none [:!emacs :!rdp]]]}
+            :rules [[:delete_or_backspace :vk_none [:mbp2019 :!emacs :!rdp]]]}
            {:des "Disable Arrow Keys",
-            :rules [[:up_arrow    :vk_none [:!emacs :!rdp]]
-                    [:left_arrow  :vk_none [:!emacs :!rdp]]
-                    [:down_arrow  :vk_none [:!emacs :!rdp]]
-                    [:right_arrow :vk_none [:!emacs :!rdp]]]}
+            :rules [[:up_arrow    :vk_none [:mbp2019 :!emacs :!rdp]]
+                    [:left_arrow  :vk_none [:mbp2019 :!emacs :!rdp]]
+                    [:down_arrow  :vk_none [:mbp2019 :!emacs :!rdp]]
+                    [:right_arrow :vk_none [:mbp2019 :!emacs :!rdp]]]}
            {:des "Disable Minimize Key"
-            :rules [[:!Cm :vk_none]]}
+            :rules [[:!Cm :vk_none [:mbp2019 :chad]]]}
 
            {:des "Left CMD to EN, Right CMD to RU"
-            :rules [[:##left_command :left_command nil {:alone :en}]
-                    [:##right_command :right_command nil {:alone :ru}]]}
+            :rules [[:##left_command :left_command [:mbp2019 :chad] {:alone :en}]
+                    [:##right_command :right_command [:mbp2019 :chad] {:alone :ru}]]}
     ]
 }
