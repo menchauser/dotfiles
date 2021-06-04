@@ -66,5 +66,8 @@
            {:des "Left CMD to EN, Right CMD to RU"
             :rules [[:##left_command :left_command [:mbp2019 :chad] {:alone :en}]
                     [:##right_command :right_command [:mbp2019 :chad] {:alone :ru}]]}
+
+           {:des "Disable Cmd-Q for Chad Keyboard"
+            :rules [[:!Cq :vk_none [:chad]]]}
     ]
 }
