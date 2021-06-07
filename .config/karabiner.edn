@@ -25,22 +25,23 @@
                          :alone 1000
                          :held  500 }}
 
-    :devices {:mbp2019 [{:vendor_id 1452 :product_id 832 :is_keyboard true}] 
-              :chad    [{:vendor_id 65261 :product_id 12384 :is_keyboard true}]}
+    :devices {:mbp2019  [{:vendor_id 1452 :product_id 832 :is_keyboard true}] 
+              :chad     [{:vendor_id 65261 :product_id 12384 :is_keyboard true}]
+              :keychron [{:vendor_id 1452 :product_id 591 :is_keyboard true}]}
     
     :applications {
             :emacs ["^org\\.gnu\\.Emacs$"]
-            :rdp ["^com\\.microsoft\\.rdc\\.macos$"]
+            :rdp   ["^com\\.microsoft\\.rdc\\.macos$"]
     }
 
     :input-sources {:en {:language "en"}
                     :ru {:language "ru"}}
 
     :main [{:des "Caps Lock to Control"
-            :rules [[:##caps_lock :left_control [:mbp2019]]]},
+            :rules [[:##caps_lock :left_control [:mbp2019 :keychron]]]},
 
            {:des "Ctrl + I to Backspace"
-            :rules [[:!T##i :delete_or_backspace [:mbp2019]]]},
+            :rules [[:!T##i :delete_or_backspace [:mbp2019 :keychron]]]},
            ;; {:des "Cmd + H to Ctrl + H in Emacs"
            ;;  :rules [[:!Ch :!Th [:emacs]]]}
            
@@ -51,7 +52,7 @@
                     [:!T##l :right_arrow [:!emacs :!rdp]]]}
             
            {:des "Ctrl + ; to Enter"
-            :rules [[:!Tsemicolon :return_or_enter [:mbp2019]]]}
+            :rules [[:!Tsemicolon :return_or_enter [:!chad]]]}
 
            {:des "Disable Backspace Key"
             :rules [[:delete_or_backspace :vk_none [:mbp2019 :!emacs :!rdp]]]}
