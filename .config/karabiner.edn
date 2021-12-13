@@ -46,10 +46,10 @@
            ;;  :rules [[:!Ch :!Th [:emacs]]]}
            
            {:des "Ctrl + H/J/K/L to Arrow Keys",
-            :rules [[:!T##k :up_arrow    [:mbp2019 :!emacs :!rdp]]
-                    [:!T##h :left_arrow  [:!emacs :!rdp]]
-                    [:!T##j :down_arrow  [:!emacs :!rdp]]
-                    [:!T##l :right_arrow [:!emacs :!rdp]]]}
+            :rules [[:!T##k :up_arrow    [:!emacs]]
+                    [:!T##h :left_arrow  [:!emacs]]
+                    [:!T##j :down_arrow  [:!emacs]]
+                    [:!T##l :right_arrow [:!emacs]]]}
             
            {:des "Ctrl + ; to Enter"
             :rules [[:!Tsemicolon :return_or_enter [:!chad]]]}
