@@ -31,8 +31,10 @@
               :keychron [{:vendor_id 1452 :product_id 591 :is_keyboard true}]}
     
     :applications {
-            :emacs ["^org\\.gnu\\.Emacs$"]
-            :rdp   ["^com\\.microsoft\\.rdc\\.macos$"]
+            :emacs  ["^org\\.gnu\\.Emacs$"]
+            :rdp    ["^com\\.microsoft\\.rdc\\.macos$"]
+            :factor ["^org\\.factorcode\\.Factor$"]  
+            :idea   ["^com\\.jetbrains\\.intellij$"]
     }
 
     :input-sources {:en {:language "en"}
@@ -71,5 +73,8 @@
 
            {:des "Disable Cmd-Q for Chad Keyboard"
             :rules [[:!Cq :vk_none [:chad]]]}
+        
+           {:des "Cmd-F12 for Idea"
+            :rules [[:!Cf12 :!Cf12 [:idea]]]}
     ]
 }
