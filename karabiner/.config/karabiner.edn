@@ -71,8 +71,8 @@
             :rules [[:##left_command :left_command [:mbp2019 :mbp2021 :chad] {:alone :en}]
                     [:##right_command :right_command [:mbp2019 :mbp2021 :chad] {:alone :ru}]]}
 
-           {:des "Disable Cmd-Q for Chad Keyboard"
-            :rules [[:!Cq :vk_none [:chad]]]}
+           {:des "Disable Cmd-Q for all keyboards"
+            :rules [[:!Cq :vk_none]]}
         
            {:des "Cmd-F12 for Idea"
             :rules [[:!Cf12 :!Cf12 [:idea]]]}
