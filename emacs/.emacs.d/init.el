@@ -15,54 +15,6 @@
 ;; Yes or No
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Custom functions which are used package configuration
-;; Open journal file at start
-(require 'calendar)
-
-(defun my-open-journal-file ()
-	(interactive)
-	(let* ((calendar-date-display-form
-					'((format "%s%.2d" year (string-to-number month))))
-				 (journal-path (concat "~/p/journal/"
-															 (calendar-date-string
-																(calendar-current-date))
-															 ".org")))
-		(find-file journal-path)
-		(end-of-buffer)))
-
-;; Custom Jira link function
-(defun my-org-insert-jira-link ()
-	(interactive)
-	(let* ((jira-link (read-string "Jira link: "))
-				 (ticket-code (car (last (split-string jira-link "/")))))
-		(org-insert-link nil jira-link ticket-code)))
-
-;; Custom date header function
-(defun my-org-insert-daily-title ()
-	(interactive)
-	(let* ((calendar-date-display-form
-					'((format "%s-%.2d-%.2d %s"
-										year
-										(string-to-number month)
-										(string-to-number day)
-										(substring dayname 0 3)))))
-		(insert 
-		 (concat "* "
-						 (calendar-date-string (calendar-current-date))))))
-
-
-;; Keys for custom functions and other options
-;; TODO: delete
-(defun my-org-mode-hook ()
-  (setq fill-column 80)
-  ;; (fci-mode t)
-	(display-fill-column-indicator-mode t)
-  (auto-fill-mode t)
-	(local-set-key (kbd "C-x C-y") 'my-org-insert-jira-link)
-	(local-set-key (kbd "C-c pd") 'my-org-insert-daily-title)
-	(setq browse-url-browser-function 'browse-url-default-browser)
-	(company-mode -1))
-
 
 ;; Use packages
 (require 'package)
@@ -242,13 +194,53 @@
 
 (use-package gptel
   :ensure t
+	:bind
+	("C-c g" . gptel-send)
 	:config
-	(setq gptel-default-mode 'org-mode)
-	(setq gptel-model 'claude-sonnet-4-5-20250929
-				gptel-backend (gptel-make-anthropic "Claude"
-												:stream t
-												:key #'gptel-api-key-from-auth-source))
-	(setq gptel-track-media t))
+	;; define provider backends
+	;; Claude
+	(setq gptel-anthropic
+				(gptel-make-anthropic "Claude"
+					:stream t
+					:key #'gptel-api-key-from-auth-source))
+	;; Use LiteLLM by default
+	(setq gptel-backend gptel-anthropic
+				gptel-model "claude-sonnet-4-5-20250929")
+	;; Common settings
+	(setq
+	 ;; Use org syntax
+	 gptel-default-mode 'org-mode
+	 ;; Include referred files in context
+	 gptel-track-media t)
+	;; Move cursor after response
+	(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+	;; Use llm-tool collection
+	(add-to-list 'load-path "/Users/mkaranashev/p/oss/llm-tool-collection")
+	(require 'llm-tool-collection)
+	(mapcar (apply-partially #'apply #'gptel-make-tool)
+					(llm-tool-collection-get-all))
+	;; Custom Tools
+	(gptel-make-tool
+	 :name "find_files"
+	 :function (lambda (pattern &optional directory)
+							 "Find files matching PATTERN in DIRECTORY (default: current dir)"
+							 (let* ((dir (or directory default-directory))
+											(cmd (format "find %s -type f -name '%s' 2>/dev/null"
+																	 (shell-quote-argument dir)
+																	 pattern))
+											(results (shell-command-to-string cmd)))
+								 (if (string-empty-p results)
+										 (format "No files found matching '%s' in %s" pattern dir)
+									 results)))
+	 :description "Find files by pattern in a directory. Use shell wildcards like *.el or test*.txt"
+	 :args (list '(:name "pattern"
+											 :type string
+											 :description "File pattern to search for (e.g., '*.el', 'test*.txt')")
+							 '(:name "directory"
+											 :type string
+											 :optional t
+											 :description "Directory to search in (optional, defaults to current directory)"))
+	 :category "filesystem"))
 
 ;; Org-mode configuration. It is built-in so no need to ensure it
 (use-package org
@@ -257,12 +249,8 @@
 				 (org-mode . display-fill-column-indicator-mode)
 				 (org-mode . auto-fill-mode)
 				 (org-mode . (lambda () (company-mode -1))))
-	:bind
-	(:map org-mode-map
-				("C-x C-y" . my-org-mode-insert-jira-link)
-				("C-c pd" . my-org-insert-daily-title))
 	:custom
-	(fill-column 120)
+	(fill-column 100)
 	(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 	(browse-url-browser-function 'browse-url-default-browser))
 
@@ -276,6 +264,8 @@
 
 	
 ;;;; USE-PACKAGE ENDS HERE ;;;;
+
+;; gptel tools
 
 ;; Factor
 (setq fuel-factor-root-dir "~/factor")
@@ -334,5 +324,7 @@
 ;; smooth scrolling
 (pixel-scroll-precision-mode 1)
 
-;; final step
-(my-open-journal-file)
+;; Load private config if it exists
+(let ((private-file (expand-file-name "private.init.el" user-emacs-directory)))
+	(when (file-exists-p private-file)
+		(load-file private-file)))
