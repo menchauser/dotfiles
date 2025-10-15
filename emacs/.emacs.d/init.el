@@ -1,3 +1,6 @@
+;; Optimize startup
+(setq gc-cons-threshold most-positive-fixnum)
+
 ;; Set path for customization settings file
 (setq custom-file
 			(expand-file-name "customize.el" user-emacs-directory))
@@ -232,6 +235,7 @@
 	(require 'evil-org-agenda)
 	(evil-org-agenda-set-keys))
 
+
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
 ;; gptel tools
@@ -250,26 +254,15 @@
 						(display-fill-column-indicator-mode t)))
 ;; (fci-mode t)))
 
-;; Keybindings
-(global-set-key (kbd "C-<tab>") 'other-window)
-;; Unset "compose mail" not to interfere with my org-mode stuff
-(keymap-global-unset "C-x m")
-;; https://emacs.stackexchange.com/a/358
-;; https://nullprogram.com/blog/2013/02/06/
-(define-minor-mode my-keys-mode
-  "My keybindings"
-  :lighter " keys"
-  :init-value t
-  :keymap
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<C-tab>") 'other-window)
-    (define-key map (kbd "C-c q") 'persp-switch)
-		(define-key map (kbd "C-x C-m") 'execute-extended-command)
-		(define-key map (kbd "C-x C-2") 'toggle-frame-maximized)
-    map))
-(define-globalized-minor-mode global-my-keys-mode my-keys-mode my-keys-mode)
-(provide 'my-keys-mode)
-
+;; Keybindings set using use-package for simplicity
+(use-package emacs
+	:ensure nil ; built in
+	:bind
+	(("<C-tab>" . other-window)
+	 ("C-c q" . persp-switch)
+	 ("C-x C-m" . execute-extended-command)
+	 ("C-x C-2" . toggle-frame-maximized)
+	 ("C-x m" . nil))) ; Unbind compose mail not to interfere with my org-mode stuff
 
 ;; Mode settings
 ;; org-mode
@@ -297,3 +290,9 @@
 (let ((private-file (expand-file-name "private.init.el" user-emacs-directory)))
 	(when (file-exists-p private-file)
 		(load-file private-file)))
+
+
+;; Reset GC threshold after startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 16 1024 1024))))
