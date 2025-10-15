@@ -1,19 +1,15 @@
 ;; Set path for customization settings file
-(setq custom-file "~/.emacs.d/customize.el")
+(setq custom-file
+			(expand-file-name "customize.el" user-emacs-directory))
 (when (not (file-exists-p custom-file))
   (with-temp-buffer (write-file custom-file)))
 (load-file custom-file)
-
-;; create server
-;; (require 'server)
-;; (unless (server-running-p)
-  ;; (server-start))
 
 ;; Hide tool bar
 (tool-bar-mode -1)
 
 ;; Yes or No
-(defalias 'yes-or-no-p 'y-or-n-p)
+(fset 'yes-or-no-p 'y-or-n-p)
 
 
 ;; Use packages
@@ -24,30 +20,30 @@
 (package-initialize)
 
 ;; Install required package
-(when (not (package-installed-p 'use-package))
+(unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package undo-fu
-	:ensure t)
+(require 'use-package)
+(setq use-package-always-ensure t) ; avoid writing :ensure t everywhere
+
+(use-package undo-fu)
 
 ;; Evil Mode
 (use-package evil
-  :ensure t
 	:init
 	(setq evil-undo-system 'undo-fu)
   :config
   (evil-mode 1))
 
 ;; Color themes
-(use-package solarized-theme :ensure t :defer t)
-(use-package zenburn-theme :ensure t :defer t)
-(use-package basic-theme :ensure t :defer t)
-(use-package eink-theme :ensure t :defer t)
+(use-package solarized-theme :defer t)
+(use-package zenburn-theme :defer t)
+(use-package basic-theme :defer t)
+(use-package eink-theme :defer t)
 
 ;; Markdown Support
 (use-package markdown-mode
-  :ensure t
 	:defer t 
   :mode (("README\\.md\\'" . gfm-mode)
 				 ("\\.md\\'" . markdown-mode)
@@ -58,39 +54,29 @@
 
 ;; Use exec-path from shell PATH
 (use-package exec-path-from-shell
-  :ensure t
 	:if (memq window-system '(mac ns x))
 	:config 
   (exec-path-from-shell-initialize))
 
 ;; Helm mode
 (use-package helm
-  :ensure t
   :config
-	(helm-mode 1))
+	(helm-mode 1)
+	(global-set-key (kbd "M-x") 'helm-M-x)
+	(global-set-key (kbd "C-x C-f") 'helm-find-files))
 
 ;; Find File In Project
-(use-package find-file-in-project
-	:ensure t)
+(use-package find-file-in-project)
 
 ;; Perspectives
 (use-package perspective
-  :ensure t
 	:custom
 	(persp-mode-prefix-key (kbd "C-c M-p"))
   :config
 	(persp-mode t))
 
-  ;; Ido
-(use-package ido
-  :ensure t
-  :config
-  (ido-mode t))
-
-
 ;; Slime
 (use-package slime
-  :ensure t
 	:defer t
 	:bind
 	(("C-c h" . slime-hyperspec-lookup))
@@ -98,13 +84,10 @@
 	(inferior-lisp-program "sbcl")
   :config
   (load "~/quicklisp/clhs-use-local.el" t))
-  
-(use-package magit
-	:ensure t
-	:defer t)
+
+(use-package magit :defer t)
 
 (use-package projectile
-	:ensure t
 	:defer t 
 	:bind-keymap
 	("C-c p" . projectile-command-map)
@@ -112,27 +95,22 @@
 	(projectile-mode +1))
 
 (use-package erlang
-	:ensure t
 	:defer t
 	:custom
 	(erlang-root-dir "/usr/local/opt/erlang"))
 
-(use-package password-store
-	:ensure t)
+(use-package password-store)
 
 (use-package persistent-scratch
-	:ensure t
 	:config
 	(persistent-scratch-setup-default))
 
 (use-package elpy
-	:ensure t
 	:defer t 
-	:init
-	(elpy-enable))
+	:hook
+	(python-mode . elpy-enable))
 
 (use-package fzf
-	:ensure t
 	:bind
 	("C-c r" . fzf)
 	:config
@@ -144,12 +122,10 @@
 				fzf/window-height 15))
 
 (use-package yasnippet
-  :ensure t
   :init
   (yas-global-mode 1))
 
 (use-package company
-	:ensure t
 	:init
 	(global-company-mode)
 	:custom
@@ -160,7 +136,6 @@
 	([(control return)] . company-complete))
 
 (use-package lsp-mode
-	:ensure t
 	:defer t
 	:bind
 	("M-RET" . lsp-execute-code-action))
@@ -179,7 +154,6 @@
 ;;   (lsp-treemacs-sync-mode 1))
 
 (use-package rustic
-	:ensure t
 	:defer t
 	:custom
 	(rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
@@ -188,12 +162,9 @@
 	(add-hook 'rustic-mode-hook
 						(lambda () (electric-pair-mode 1))))
 
-(use-package sweeprolog
-	:ensure t
-	:defer t)
+(use-package sweeprolog :defer t)
 
 (use-package gptel
-  :ensure t
 	:bind
 	("C-c g" . gptel-send)
 	:config
@@ -205,7 +176,7 @@
 					:key #'gptel-api-key-from-auth-source))
 	;; Use LiteLLM by default
 	(setq gptel-backend gptel-anthropic
-				gptel-model "claude-sonnet-4-5-20250929")
+				gptel-model 'claude-sonnet-4-5-20250929)
 	;; Common settings
 	(setq
 	 ;; Use org syntax
@@ -215,10 +186,10 @@
 	;; Move cursor after response
 	(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
 	;; Use llm-tool collection
-	(add-to-list 'load-path "/Users/mkaranashev/p/oss/llm-tool-collection")
-	(require 'llm-tool-collection)
-	(mapcar (apply-partially #'apply #'gptel-make-tool)
-					(llm-tool-collection-get-all))
+	;; (add-to-list 'load-path "/Users/mkaranashev/p/oss/llm-tool-collection")
+	;;(require 'llm-tool-collection)
+	;; (mapcar (apply-partially #'apply #'gptel-make-tool)
+	;; (llm-tool-collection-get-all))
 	;; Custom Tools
 	(gptel-make-tool
 	 :name "find_files"
@@ -255,14 +226,12 @@
 	(browse-url-browser-function 'browse-url-default-browser))
 
 (use-package evil-org
-	:ensure t
 	:after org
 	:hook (org-mode . (lambda () (evil-org-mode)))
 	:config
 	(require 'evil-org-agenda)
 	(evil-org-agenda-set-keys))
 
-	
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
 ;; gptel tools
@@ -279,7 +248,7 @@
 						(disable-tabs)
 						(setq fill-column 80)
 						(display-fill-column-indicator-mode t)))
-						;; (fci-mode t)))
+;; (fci-mode t)))
 
 ;; Keybindings
 (global-set-key (kbd "C-<tab>") 'other-window)
