@@ -15,6 +15,55 @@
 ;; Yes or No
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Custom functions which are used package configuration
+;; Open journal file at start
+(require 'calendar)
+
+(defun my-open-journal-file ()
+	(interactive)
+	(let* ((calendar-date-display-form
+					'((format "%s%.2d" year (string-to-number month))))
+				 (journal-path (concat "~/p/journal/"
+															 (calendar-date-string
+																(calendar-current-date))
+															 ".org")))
+		(find-file journal-path)
+		(end-of-buffer)))
+
+;; Custom Jira link function
+(defun my-org-insert-jira-link ()
+	(interactive)
+	(let* ((jira-link (read-string "Jira link: "))
+				 (ticket-code (car (last (split-string jira-link "/")))))
+		(org-insert-link nil jira-link ticket-code)))
+
+;; Custom date header function
+(defun my-org-insert-daily-title ()
+	(interactive)
+	(let* ((calendar-date-display-form
+					'((format "%s-%.2d-%.2d %s"
+										year
+										(string-to-number month)
+										(string-to-number day)
+										(substring dayname 0 3)))))
+		(insert 
+		 (concat "* "
+						 (calendar-date-string (calendar-current-date))))))
+
+
+;; Keys for custom functions and other options
+;; TODO: delete
+(defun my-org-mode-hook ()
+  (setq fill-column 80)
+  ;; (fci-mode t)
+	(display-fill-column-indicator-mode t)
+  (auto-fill-mode t)
+	(local-set-key (kbd "C-x C-y") 'my-org-insert-jira-link)
+	(local-set-key (kbd "C-c pd") 'my-org-insert-daily-title)
+	(setq browse-url-browser-function 'browse-url-default-browser)
+	(company-mode -1))
+
+
 ;; Use packages
 (require 'package)
 ;; Load packages from Melpa
@@ -39,101 +88,82 @@
   (evil-mode 1))
 
 ;; Color themes
-(use-package solarized-theme
-  :ensure t)
-
-(use-package zenburn-theme
-	:ensure t)
-
-(use-package basic-theme
-	:ensure t)
-
-(use-package eink-theme
-	:ensure t)
+(use-package solarized-theme :ensure t :defer t)
+(use-package zenburn-theme :ensure t :defer t)
+(use-package basic-theme :ensure t :defer t)
+(use-package eink-theme :ensure t :defer t)
 
 ;; Markdown Support
 (use-package markdown-mode
   :ensure t
+	:defer t 
   :mode (("README\\.md\\'" . gfm-mode)
-   ("\\.md\\'" . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode))
-  :init
-  (setq markdown-command "multimarkdown")
-  :config
-  (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
+				 ("\\.md\\'" . markdown-mode)
+				 ("\\.markdown\\'" . markdown-mode))
+	:hook (markdown-mode . turn-on-auto-fill)
+  :custom
+  (markdown-command "multimarkdown"))
 
 ;; Use exec-path from shell PATH
 (use-package exec-path-from-shell
   :ensure t
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+	:if (memq window-system '(mac ns x))
+	:config 
+  (exec-path-from-shell-initialize))
 
 ;; Helm mode
 (use-package helm
   :ensure t
-  :config)
+  :config
+	(helm-mode 1))
 
 ;; Find File In Project
 (use-package find-file-in-project
-	:ensure t
-	:config)
-
-
-;; Fill Column Indicator
-;; we should use display-fill-column-indicator-mode
-;; (use-package fill-column-indicator
-;;   :ensure t)
+	:ensure t)
 
 ;; Perspectives
 (use-package perspective
   :ensure t
-  ;;:bind
-  ;;("C-x C-b" . persp-list-buffers)
+	:custom
+	(persp-mode-prefix-key (kbd "C-c M-p"))
   :config
-	(progn
-		(customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
-		(persp-mode t)))
+	(persp-mode t))
 
   ;; Ido
 (use-package ido
-    :ensure t
-    :config
-    (ido-mode t))
+  :ensure t
+  :config
+  (ido-mode t))
 
 
 ;; Slime
 (use-package slime
   :ensure t
+	:defer t
 	:bind
 	(("C-c h" . slime-hyperspec-lookup))
+	:custom
+	(inferior-lisp-program "sbcl")
   :config
-  (progn
-    (setq inferior-lisp-program "sbcl")
-    (load "~/quicklisp/clhs-use-local.el" t)))
+  (load "~/quicklisp/clhs-use-local.el" t))
   
 (use-package magit
-	:ensure t)
+	:ensure t
+	:defer t)
 
 (use-package projectile
 	:ensure t
+	:defer t 
+	:bind-keymap
+	("C-c p" . projectile-command-map)
 	:config
-	(progn
-		(projectile-mode +1)
-		(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)))
+	(projectile-mode +1))
 
 (use-package erlang
 	:ensure t
-	:config
-	(setq erlang-root-dir "/usr/local/opt/erlang"))
-
-(use-package evil-org
-	:ensure t
-	:after org
-	:hook (org-mode . (lambda () (evil-org-mode)))
-	:config
-	(require 'evil-org-agenda)
-	(evil-org-agenda-set-keys))
+	:defer t
+	:custom
+	(erlang-root-dir "/usr/local/opt/erlang"))
 
 (use-package password-store
 	:ensure t)
@@ -145,6 +175,7 @@
 
 (use-package elpy
 	:ensure t
+	:defer t 
 	:init
 	(elpy-enable))
 
@@ -177,6 +208,8 @@
 	([(control return)] . company-complete))
 
 (use-package lsp-mode
+	:ensure t
+	:defer t
 	:bind
 	("M-RET" . lsp-execute-code-action))
 
@@ -195,6 +228,7 @@
 
 (use-package rustic
 	:ensure t
+	:defer t
 	:custom
 	(rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
 	:config
@@ -203,7 +237,43 @@
 						(lambda () (electric-pair-mode 1))))
 
 (use-package sweeprolog
-	:ensure t)
+	:ensure t
+	:defer t)
+
+(use-package gptel
+  :ensure t
+	:config
+	(setq gptel-default-mode 'org-mode)
+	(setq gptel-model 'claude-sonnet-4-5-20250929
+				gptel-backend (gptel-make-anthropic "Claude"
+												:stream t
+												:key #'gptel-api-key-from-auth-source))
+	(setq gptel-track-media t))
+
+;; Org-mode configuration. It is built-in so no need to ensure it
+(use-package org
+	:ensure nil ; Built-in
+	:hook ((org-mode . visual-line-mode)   ; soft-wrapping
+				 (org-mode . display-fill-column-indicator-mode)
+				 (org-mode . auto-fill-mode)
+				 (org-mode . (lambda () (company-mode -1))))
+	:bind
+	(:map org-mode-map
+				("C-x C-y" . my-org-mode-insert-jira-link)
+				("C-c pd" . my-org-insert-daily-title))
+	:custom
+	(fill-column 120)
+	(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+	(browse-url-browser-function 'browse-url-default-browser))
+
+(use-package evil-org
+	:ensure t
+	:after org
+	:hook (org-mode . (lambda () (evil-org-mode)))
+	:config
+	(require 'evil-org-agenda)
+	(evil-org-agenda-set-keys))
+
 	
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
@@ -244,60 +314,12 @@
 
 ;; Mode settings
 ;; org-mode
+;; Soft wrapping for org-mode
 
 ;; Configure encryption
 ;;(require 'org-crypt)
 (require 'epa-file)
 (epa-file-enable)
-
-;; Open perspective with journal on start
-(require 'calendar)
-
-(defun my-open-journal-file ()
-	(interactive)
-	(let* ((calendar-date-display-form
-					'((format "%s%.2d" year (string-to-number month))))
-				 (journal-path (concat "~/p/journal/"
-															 (calendar-date-string
-																(calendar-current-date))
-															 ".org")))
-		(find-file journal-path)
-		(end-of-buffer)))
-
-
-;; Custom Jira link function
-(defun my-org-insert-jira-link ()
-	(interactive)
-	(let* ((jira-link (read-string "Jira link: "))
-				 (ticket-code (car (last (split-string jira-link "/")))))
-		(org-insert-link nil jira-link ticket-code)))
-
-;; Custom date header function
-(defun my-org-insert-daily-title ()
-	(interactive)
-	(let* ((calendar-date-display-form
-					'((format "%s-%.2d-%.2d %s"
-										year
-										(string-to-number month)
-										(string-to-number day)
-										(substring dayname 0 3)))))
-		(insert 
-		 (concat "* "
-						 (calendar-date-string (calendar-current-date))))))
-
-
-;; Keys for custom functions and other options
-(defun my-org-mode-hook ()
-  (setq fill-column 80)
-  ;; (fci-mode t)
-	(display-fill-column-indicator-mode t)
-  (auto-fill-mode t)
-	(local-set-key (kbd "C-x C-y") 'my-org-insert-jira-link)
-	(local-set-key (kbd "C-c pd") 'my-org-insert-daily-title)
-	(setq browse-url-browser-function 'browse-url-default-browser)
-	(company-mode -1))
-
-(add-hook 'org-mode-hook 'my-org-mode-hook)
 
 ;; ispell
 ;; (setenv

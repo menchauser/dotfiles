@@ -107,7 +107,7 @@
  '(org-log-done 'time)
  '(org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
  '(package-selected-packages
-	 '(sweeprolog org-bullets org-gcal evil-ledger ledger-mode company-ledger undo-fu rustic lsp-treemacs lsp-ui kotlin-mode lsp-mode fzf elpy persistent-scratch fuel password-store evil-org emacs-everywhere find-file-in-project erlang projectile eink-theme basic-theme zenburn-theme zenburn undo-tree magit slime perspective fill-column-indicator helm j-mode bind-key company dash goto-chg uniquify-files wisi exec-path-from-shell ada-ref-man company-emoji markdown-mode solarized-theme evil))
+	 '(gptel sweeprolog org-bullets org-gcal evil-ledger ledger-mode company-ledger undo-fu rustic lsp-treemacs lsp-ui kotlin-mode lsp-mode fzf elpy persistent-scratch fuel password-store evil-org emacs-everywhere find-file-in-project erlang projectile eink-theme basic-theme zenburn-theme zenburn undo-tree magit slime perspective fill-column-indicator helm j-mode bind-key company dash goto-chg uniquify-files wisi exec-path-from-shell ada-ref-man company-emoji markdown-mode solarized-theme evil))
  '(python-shell-interpreter "python3")
  '(scroll-bar-mode nil)
  '(solarized-scale-org-headlines t)
