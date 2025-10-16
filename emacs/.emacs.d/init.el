@@ -262,6 +262,26 @@
 	:config
 	(ultra-scroll-mode 1))
 
+;; for claude code
+(use-package inheritenv :defer t
+  :vc (:url "https://github.com/purcell/inheritenv" :rev :newest))
+
+;; for claude code: terminal backend
+(use-package eat :defer t)
+;; for claude code: vterm terminal backend:
+(use-package vterm :defer t)
+
+;; claude code
+(use-package claude-code :defer t
+  :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
+  :config
+  (claude-code-mode)
+  :bind-keymap
+  ("C-c c" . claude-code-command-map)
+  ;; Optionally define a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm modes after invoking claude-code-cycle-mode / C-c M.
+  :bind
+  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
+  
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
