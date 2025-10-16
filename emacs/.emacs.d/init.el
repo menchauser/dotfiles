@@ -63,10 +63,14 @@
 
 ;; Helm mode
 (use-package helm
+  :bind
+  (("M-x" . helm-M-x)
+   ("C-x C-f" . helm-find-files))
   :config
 	(helm-mode 1)
-	(global-set-key (kbd "M-x") 'helm-M-x)
-	(global-set-key (kbd "C-x C-f") 'helm-find-files))
+  ;; Do not use helm for gptel command - it's not working
+  (add-to-list 'helm-completing-read-handlers-alist
+               '(gptel . nil)))
 
 ;; Find File In Project
 (use-package find-file-in-project)
@@ -170,14 +174,24 @@
 (use-package gptel
 	:bind
 	("C-c g" . gptel-send)
+  :init
+  ;; Load custom prompts to inject them in config
+  (let ((custom-prompts-file 
+         (expand-file-name "gptel-custom-prompts.el" user-emacs-directory)))
+    (when (file-exists-p custom-prompts-file)
+      (load-file custom-prompts-file)))
 	:config
+  ;; Merge custom prompts with built-in ones
+  (when (boundp 'my-gptel-custom-directives)
+    (setq gptel-directives
+          (append gptel-directives my-gptel-custom-directives)))
 	;; define provider backends
 	;; Claude
 	(setq gptel-anthropic
 				(gptel-make-anthropic "Claude"
 					:stream t
 					:key #'gptel-api-key-from-auth-source))
-	;; Use LiteLLM by default
+	;; Use Claude by default
 	(setq gptel-backend gptel-anthropic
 				gptel-model 'claude-sonnet-4-5-20250929)
 	;; Common settings
@@ -244,14 +258,14 @@
 	:config
 	(ultra-scroll-mode 1))
 
-(use-package mcp
-	:ensure t
-	:after gptel
-	:custom (mcp-hub-servers
-					 `(("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
-						 ("infobip-docs" . (:url "https://mcp.infobip.com/search"))))
-	:config (require 'mcp-hub)
-	:hook (after-init . mcp-hub-start-all-server))
+;; (use-package mcp
+;; 	:ensure t
+;; 	:after gptel
+;; 	:custom (mcp-hub-servers
+;; 					 `(("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
+;; 						 ("infobip-docs" . (:url "https://mcp.infobip.com/search"))))
+;; 	:config (require 'mcp-hub)
+;; 	:hook (after-init . mcp-hub-start-all-server))
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
@@ -307,7 +321,6 @@
 (let ((private-file (expand-file-name "private.init.el" user-emacs-directory)))
 	(when (file-exists-p private-file)
 		(load-file private-file)))
-
 
 ;; Reset GC threshold after startup
 (add-hook 'emacs-startup-hook
