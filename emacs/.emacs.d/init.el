@@ -199,7 +199,9 @@
 	 ;; Use org syntax
 	 gptel-default-mode 'org-mode
 	 ;; Include referred files in context
-	 gptel-track-media t)
+	 gptel-track-media t
+   ;; Allow debugging of requests
+   gptel-expert-commands t)
 	;; Move cursor after response
 	(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
 	;; Use llm-tool collection
@@ -207,6 +209,8 @@
 	;;(require 'llm-tool-collection)
 	;; (mapcar (apply-partially #'apply #'gptel-make-tool)
 	;; (llm-tool-collection-get-all))
+  ;; MCP
+  (require 'gptel-integrations)
 	;; Custom Tools
 	(gptel-make-tool
 	 :name "find_files"
@@ -258,14 +262,6 @@
 	:config
 	(ultra-scroll-mode 1))
 
-;; (use-package mcp
-;; 	:ensure t
-;; 	:after gptel
-;; 	:custom (mcp-hub-servers
-;; 					 `(("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
-;; 						 ("infobip-docs" . (:url "https://mcp.infobip.com/search"))))
-;; 	:config (require 'mcp-hub)
-;; 	:hook (after-init . mcp-hub-start-all-server))
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
