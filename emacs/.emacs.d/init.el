@@ -222,9 +222,9 @@
 	:hook ((org-mode . visual-line-mode)   ; soft-wrapping
 				 (org-mode . display-fill-column-indicator-mode)
 				 (org-mode . auto-fill-mode)
-				 (org-mode . (lambda () (company-mode -1)))
-				 (org-mode . (lambda () (setq tab-width 2))))
+				 (org-mode . (lambda () (company-mode -1))))
 	:custom
+	(indent-tabs-mode nil) ; do not use tabs for indentation
 	(fill-column 100)
 	(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 	(browse-url-browser-function 'browse-url-default-browser))
