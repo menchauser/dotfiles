@@ -222,7 +222,8 @@
 	:hook ((org-mode . visual-line-mode)   ; soft-wrapping
 				 (org-mode . display-fill-column-indicator-mode)
 				 (org-mode . auto-fill-mode)
-				 (org-mode . (lambda () (company-mode -1))))
+				 (org-mode . (lambda () (company-mode -1)))
+				 (org-mode . (lambda () (setq tab-width 2))))
 	:custom
 	(fill-column 100)
 	(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
@@ -235,6 +236,22 @@
 	(require 'evil-org-agenda)
 	(evil-org-agenda-set-keys))
 
+(use-package ultra-scroll
+	:ensure t
+	:init
+	(setq scroll-conservatively 3
+				scroll-margin 0)
+	:config
+	(ultra-scroll-mode 1))
+
+(use-package mcp
+	:ensure t
+	:after gptel
+	:custom (mcp-hub-servers
+					 `(("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
+						 ("infobip-docs" . (:url "https://mcp.infobip.com/search"))))
+	:config (require 'mcp-hub)
+	:hook (after-init . mcp-hub-start-all-server))
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
