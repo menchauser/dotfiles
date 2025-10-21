@@ -282,6 +282,19 @@
   :bind
   (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
   
+;; JSON indentation
+(use-package json-mode
+  :custom
+  (js-indent-level 2))
+
+;; Projectile
+(use-package projectile
+  :defer t
+  :bind-keymap
+  ("s-p" . projectile-command-map)
+  :config
+  (projectile-mode +1))
+
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
@@ -332,6 +345,9 @@
 
 ;; smooth scrolling
 (pixel-scroll-precision-mode 1)
+
+;; disable audible bell, use display-bell
+(setq visible-bell t)
 
 ;; Load private config if it exists
 (let ((private-file (expand-file-name "private.init.el" user-emacs-directory)))
