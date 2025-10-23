@@ -1,5 +1,5 @@
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; (require 'benchmark-init)
+;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; Optimize startup
 (setq gc-cons-threshold most-positive-fixnum)
 
@@ -305,6 +305,18 @@
   :config
   (projectile-mode +1))
 
+;; Haskell
+(use-package eglot
+  :config
+  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  :config
+  (setq-default eglot-workspace-configuration
+                '(:haskell (:plugin (:stan (:globalOn :json-false))    ; disable stan
+                                    :formattingProvider "fourmolu")))  ; use fourmolu instead of ormolu
+  :custom
+  (eglot-autoshutdown t) ; shutdown language server after closing last file
+  (eglot-confirm-server-initiated-edits nil) ; allow edits without confirmation
+)
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
@@ -323,6 +335,7 @@
 						(setq fill-column 80)
 						(display-fill-column-indicator-mode t)))
 ;; (fci-mode t)))
+
 
 ;; Keybindings set using use-package for simplicity
 (use-package emacs
