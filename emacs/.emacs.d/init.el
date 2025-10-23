@@ -1,3 +1,5 @@
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; Optimize startup
 (setq gc-cons-threshold most-positive-fixnum)
 
@@ -94,12 +96,20 @@
 
 (use-package magit :defer t)
 
+;; For better performance with projectile 
+(use-package which-key
+  :config
+  (which-key-mode +1))
+
+
 (use-package projectile
-	:defer t 
-	:bind-keymap
-	("C-c p" . projectile-command-map)
-	:config
-	(projectile-mode +1))
+  :defer t 
+  :init
+  (setq projectile-project-search-path '("~/p/infobip/"))
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode +1))
 
 (use-package erlang
 	:defer t
