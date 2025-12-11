@@ -318,6 +318,25 @@
   (eglot-confirm-server-initiated-edits nil) ; allow edits without confirmation
 )
 
+;; auto-fill only comments in Literate Haskell file, not the code
+(defun my-literate-haskell-auto-fill ()
+  "Auto-fill only non-code (bird-style) lines in literate Haskell."
+  (unless (save-excursion
+            (beginning-of-line)
+            (looking-at "^>"))
+    (do-auto-fill)))
+
+(use-package haskell-mode
+  :hook ((haskell-mode . interactive-haskell-mode)
+         (literate-haskell-mode . interactive-haskell-mode)
+         (literate-haskell-mode . (lambda ()
+                                    (auto-fill-mode 1)
+                                    (setq-local auto-fill-function
+                                                #'my-literate-haskell-auto-fill))))
+  :bind
+  ("C-x C-h" . haskell-hoogle))
+
+
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
 ;; gptel tools
