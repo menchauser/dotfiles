@@ -200,7 +200,10 @@
 	(setq gptel-anthropic
 				(gptel-make-anthropic "Claude"
 					:stream t
-					:key #'gptel-api-key-from-auth-source))
+					:key #'gptel-api-key-from-auth-source
+          :request-params '(:max_tokens 16000
+                            :thinking (:type "enabled"
+                                             :budget_tokens 10000))))
 	;; Use Claude by default
 	(setq gptel-backend gptel-anthropic
 				gptel-model 'claude-sonnet-4-5-20250929)
@@ -336,6 +339,10 @@
   :bind
   ("C-x C-h" . haskell-hoogle))
 
+(use-package avy
+  :bind 
+  ("C-'" . avy-goto-char-timer)
+)
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
