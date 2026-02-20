@@ -254,6 +254,8 @@
 				 (org-mode . display-fill-column-indicator-mode)
 				 (org-mode . auto-fill-mode)
 				 (org-mode . (lambda () (company-mode -1))))
+        :config
+        (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
 	:custom
 	(indent-tabs-mode nil) ; do not use tabs for indentation
 	(fill-column 100)
@@ -344,12 +346,17 @@
   ("C-'" . avy-goto-char-timer)
 )
 
+;; I 
+(use-package verb
+  :defer t)
+
+(use-package fuel
+  :init
+  (setq fuel-factor-root-dir "~/factor"))
+
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
-;; gptel tools
-
 ;; Factor
-(setq fuel-factor-root-dir "~/factor")
 
 ;; (setq custom-tab-width 2)
 (defun disable-tabs () (setq indent-tabs-mode nil))
