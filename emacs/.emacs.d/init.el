@@ -64,15 +64,24 @@
   (exec-path-from-shell-initialize))
 
 ;; Helm mode
-(use-package helm
-  :bind
-  (("M-x" . helm-M-x)
-   ("C-x C-f" . helm-find-files))
+;; (use-package helm
+;;   :bind
+;;   (("M-x" . helm-M-x)
+;;    ("C-x C-f" . helm-find-files))
+;;   :config
+;; 	(helm-mode 1)
+;;   ;; Do not use helm for gptel command - it's not working
+;;   (add-to-list 'helm-completing-read-handlers-alist
+;;                '(gptel . nil)))
+;; Let's use Vertico instead
+(use-package vertico
   :config
-	(helm-mode 1)
-  ;; Do not use helm for gptel command - it's not working
-  (add-to-list 'helm-completing-read-handlers-alist
-               '(gptel . nil)))
+  (vertico-mode 1))
+
+(use-package marginalia
+  :config
+  (marginalia-mode))
+
 
 ;; Find File In Project
 (use-package find-file-in-project)
@@ -122,10 +131,10 @@
 	:config
 	(persistent-scratch-setup-default))
 
-(use-package elpy
-	:defer t 
-	:hook
-	(python-mode . elpy-enable))
+;; (use-package elpy
+;; 	:defer t 
+;; 	:hook
+;; 	(python-mode . elpy-enable))
 
 (use-package fzf
 	:bind
@@ -206,7 +215,7 @@
                                              :budget_tokens 10000))))
 	;; Use Claude by default
 	(setq gptel-backend gptel-anthropic
-				gptel-model 'claude-sonnet-4-5-20250929)
+				gptel-model 'claude-sonnet-4-6)
 	;; Common settings
 	(setq
 	 ;; Use org syntax
@@ -312,8 +321,9 @@
 
 ;; Haskell
 (use-package eglot
-  :config
-  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  :hook
+  ((haskell-mode . eglot-ensure)
+   (python-mode . eglot-ensure))
   :config
   (setq-default eglot-workspace-configuration
                 '(:haskell (:plugin (:stan (:globalOn :json-false))    ; disable stan
