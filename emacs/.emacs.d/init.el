@@ -265,6 +265,8 @@
 				 (org-mode . (lambda () (company-mode -1))))
         :config
         (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
+        ; Unbind C-' as it is used by avy
+        (define-key org-mode-map (kbd "C-'") nil)
 	:custom
 	(indent-tabs-mode nil) ; do not use tabs for indentation
 	(fill-column 100)
