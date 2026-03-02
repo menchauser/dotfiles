@@ -75,6 +75,9 @@
 ;;                '(gptel . nil)))
 ;; Let's use Vertico instead
 (use-package vertico
+  :custom
+  ((completion-ignore-case t)
+   (read-buffer-completion-ignore-case t))
   :config
   (vertico-mode 1))
 
