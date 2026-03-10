@@ -420,6 +420,13 @@
 ;; disable audible bell, use display-bell
 (setq visible-bell t)
 
+;; save minibuffer history
+(setq history-length 25)
+(savehist-mode 1)
+
+;; dont pop UI dialog when prompting
+(setq use-dialog-box nil)
+
 ;; Load private config if it exists
 (let ((private-file (expand-file-name "private.init.el" user-emacs-directory)))
 	(when (file-exists-p private-file)
