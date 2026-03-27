@@ -369,6 +369,13 @@
   :init
   (setq fuel-factor-root-dir "~/factor"))
 
+;; Nice reading experience with word wrapping
+(use-package olivetti
+  :ensure t
+  :hook (markdown-mode . olivetti-mode)
+  :custom
+  (olivetti-body-width 100))
+
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
 ;; Factor
