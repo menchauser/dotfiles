@@ -5,7 +5,7 @@
 
 ;; Set path for customization settings file
 (setq custom-file
-			(expand-file-name "customize.el" user-emacs-directory))
+      (expand-file-name "customize.el" user-emacs-directory))
 (when (not (file-exists-p custom-file))
   (with-temp-buffer (write-file custom-file)))
 (load-file custom-file)
@@ -16,6 +16,8 @@
 ;; Yes or No
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; default font
+(set-face-attribute 'default nil :font "Berkeley Mono-14")
 
 ;; Use packages
 (require 'package)
@@ -36,8 +38,8 @@
 
 ;; Evil Mode
 (use-package evil
-	:init
-	(setq evil-undo-system 'undo-fu)
+  :init
+  (setq evil-undo-system 'undo-fu)
   :config
   (evil-mode 1))
 
@@ -49,18 +51,18 @@
 
 ;; Markdown Support
 (use-package markdown-mode
-	:defer t 
+  :defer t 
   :mode (("README\\.md\\'" . gfm-mode)
-				 ("\\.md\\'" . markdown-mode)
-				 ("\\.markdown\\'" . markdown-mode))
-	:hook (markdown-mode . turn-on-auto-fill)
+	 ("\\.md\\'" . markdown-mode)
+	 ("\\.markdown\\'" . markdown-mode))
+  :hook (markdown-mode . turn-on-auto-fill)
   :custom
   (markdown-command "multimarkdown"))
 
 ;; Use exec-path from shell PATH
 (use-package exec-path-from-shell
-	:if (memq window-system '(mac ns x))
-	:config 
+  :if (memq window-system '(mac ns x))
+  :config 
   (exec-path-from-shell-initialize))
 
 ;; Helm mode
@@ -85,24 +87,34 @@
   :config
   (marginalia-mode))
 
+;; Route 'completion-at-point through Vertico 
+(use-package consult
+  :config
+  (setq completion-in-region-function
+        (lambda (&rest args)
+          (apply (if vertico-mode
+                     #'consult-completion-in-region
+                   #'completion--in-region)
+                 args))))
+
 
 ;; Find File In Project
 (use-package find-file-in-project)
 
 ;; Perspectives
 (use-package perspective
-	:custom
-	(persp-mode-prefix-key (kbd "C-c M-p"))
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))
   :config
-	(persp-mode t))
+  (persp-mode t))
 
 ;; Slime
 (use-package slime
-	:defer t
-	:bind
-	(("C-c h" . slime-hyperspec-lookup))
-	:custom
-	(inferior-lisp-program "sbcl")
+  :defer t
+  :bind
+  (("C-c h" . slime-hyperspec-lookup))
+  :custom
+  (inferior-lisp-program "sbcl")
   :config
   (load "~/quicklisp/clhs-use-local.el" t))
 
@@ -124,15 +136,15 @@
   (projectile-mode +1))
 
 (use-package erlang
-	:defer t
-	:custom
-	(erlang-root-dir "/usr/local/opt/erlang"))
+  :defer t
+  :custom
+  (erlang-root-dir "/usr/local/opt/erlang"))
 
 (use-package password-store)
 
 (use-package persistent-scratch
-	:config
-	(persistent-scratch-setup-default))
+  :config
+  (persistent-scratch-setup-default))
 
 ;; (use-package elpy
 ;; 	:defer t 
@@ -140,34 +152,34 @@
 ;; 	(python-mode . elpy-enable))
 
 (use-package fzf
-	:bind
-	("C-c r" . fzf)
-	:config
-	(setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
-				fzf/executable "fzf"
-				fzf/git-grep-args "-i --line-number %s"
-				fzf/grep-command "grep -nrH"
-				fzf/position-bottom t
-				fzf/window-height 15))
+  :bind
+  ("C-c r" . fzf)
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+	fzf/executable "fzf"
+	fzf/git-grep-args "-i --line-number %s"
+	fzf/grep-command "grep -nrH"
+	fzf/position-bottom t
+	fzf/window-height 15))
 
 (use-package yasnippet
   :init
   (yas-global-mode 1))
 
 (use-package company
-	:init
-	(global-company-mode)
-	:custom
-	(company-idle-delay 0)
-	(company-echo-delay 0)
-	(company-minimum-prefix-length 1)
-	:bind
-	([(control return)] . company-complete))
+  :init
+  (global-company-mode)
+  :custom
+  (company-idle-delay 0)
+  (company-echo-delay 0)
+  (company-minimum-prefix-length 1)
+  :bind
+  ([(control return)] . company-complete))
 
 (use-package lsp-mode
-	:defer t
-	:bind
-	("M-RET" . lsp-execute-code-action))
+  :defer t
+  :bind
+  ("M-RET" . lsp-execute-code-action))
 
 ;; (use-package lsp-ui
 ;; 	:ensure t
@@ -183,113 +195,113 @@
 ;;   (lsp-treemacs-sync-mode 1))
 
 (use-package rustic
-	:defer t
-	:custom
-	(rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
-	:config
-	(setq rustic-format-on-save t)
-	(add-hook 'rustic-mode-hook
-						(lambda () (electric-pair-mode 1))))
+  :defer t
+  :custom
+  (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+  :config
+  (setq rustic-format-on-save t)
+  (add-hook 'rustic-mode-hook
+	    (lambda () (electric-pair-mode 1))))
 
 (use-package sweeprolog :defer t)
 
 (use-package gptel
-	:bind
-	("C-c g" . gptel-send)
+  :bind
+  ("C-c g" . gptel-send)
   :init
   ;; Load custom prompts to inject them in config
   (let ((custom-prompts-file 
          (expand-file-name "gptel-custom-prompts.el" user-emacs-directory)))
     (when (file-exists-p custom-prompts-file)
       (load-file custom-prompts-file)))
-	:config
+  :config
   ;; Merge custom prompts with built-in ones
   (when (boundp 'my-gptel-custom-directives)
     (setq gptel-directives
           (append gptel-directives my-gptel-custom-directives)))
-	;; define provider backends
-	;; Claude
-	(setq gptel-anthropic
-				(gptel-make-anthropic "Claude"
-					:stream t
-					:key #'gptel-api-key-from-auth-source
+  ;; define provider backends
+  ;; Claude
+  (setq gptel-anthropic
+	(gptel-make-anthropic "Claude"
+	  :stream t
+	  :key #'gptel-api-key-from-auth-source
           :request-params '(:max_tokens 16000
-                            :thinking (:type "enabled"
-                                             :budget_tokens 10000))))
-	;; Use Claude by default
-	(setq gptel-backend gptel-anthropic
-				gptel-model 'claude-sonnet-4-6)
-	;; Common settings
-	(setq
-	 ;; Use org syntax
-	 gptel-default-mode 'org-mode
-	 ;; Include referred files in context
-	 gptel-track-media t
+                                        :thinking (:type "enabled"
+                                                         :budget_tokens 10000))))
+  ;; Use Claude by default
+  (setq gptel-backend gptel-anthropic
+	gptel-model 'claude-sonnet-4-6)
+  ;; Common settings
+  (setq
+   ;; Use org syntax
+   gptel-default-mode 'org-mode
+   ;; Include referred files in context
+   gptel-track-media t
    ;; Allow debugging of requests
    gptel-expert-commands t)
-	;; Move cursor after response
-	(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
-	;; Use llm-tool collection
-	;; (add-to-list 'load-path "/Users/mkaranashev/p/oss/llm-tool-collection")
-	;;(require 'llm-tool-collection)
-	;; (mapcar (apply-partially #'apply #'gptel-make-tool)
-	;; (llm-tool-collection-get-all))
+  ;; Move cursor after response
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+  ;; Use llm-tool collection
+  ;; (add-to-list 'load-path "/Users/mkaranashev/p/oss/llm-tool-collection")
+  ;;(require 'llm-tool-collection)
+  ;; (mapcar (apply-partially #'apply #'gptel-make-tool)
+  ;; (llm-tool-collection-get-all))
   ;; MCP
   (require 'gptel-integrations)
-	;; Custom Tools
-	(gptel-make-tool
-	 :name "find_files"
-	 :function (lambda (pattern &optional directory)
-							 "Find files matching PATTERN in DIRECTORY (default: current dir)"
-							 (let* ((dir (or directory default-directory))
-											(cmd (format "find %s -type f -name '%s' 2>/dev/null"
-																	 (shell-quote-argument dir)
-																	 pattern))
-											(results (shell-command-to-string cmd)))
-								 (if (string-empty-p results)
-										 (format "No files found matching '%s' in %s" pattern dir)
-									 results)))
-	 :description "Find files by pattern in a directory. Use shell wildcards like *.el or test*.txt"
-	 :args (list '(:name "pattern"
-											 :type string
-											 :description "File pattern to search for (e.g., '*.el', 'test*.txt')")
-							 '(:name "directory"
-											 :type string
-											 :optional t
-											 :description "Directory to search in (optional, defaults to current directory)"))
-	 :category "filesystem"))
+  ;; Custom Tools
+  (gptel-make-tool
+   :name "find_files"
+   :function (lambda (pattern &optional directory)
+	       "Find files matching PATTERN in DIRECTORY (default: current dir)"
+	       (let* ((dir (or directory default-directory))
+		      (cmd (format "find %s -type f -name '%s' 2>/dev/null"
+				   (shell-quote-argument dir)
+				   pattern))
+		      (results (shell-command-to-string cmd)))
+		 (if (string-empty-p results)
+		     (format "No files found matching '%s' in %s" pattern dir)
+		   results)))
+   :description "Find files by pattern in a directory. Use shell wildcards like *.el or test*.txt"
+   :args (list '(:name "pattern"
+		       :type string
+		       :description "File pattern to search for (e.g., '*.el', 'test*.txt')")
+	       '(:name "directory"
+		       :type string
+		       :optional t
+		       :description "Directory to search in (optional, defaults to current directory)"))
+   :category "filesystem"))
 
 ;; Org-mode configuration. It is built-in so no need to ensure it
 (use-package org
-	:ensure nil ; Built-in
-	:hook ((org-mode . visual-line-mode)   ; soft-wrapping
-				 (org-mode . display-fill-column-indicator-mode)
-				 (org-mode . auto-fill-mode)
-				 (org-mode . (lambda () (company-mode -1))))
-        :config
-        (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
-        ; Unbind C-' as it is used by avy
-        (define-key org-mode-map (kbd "C-'") nil)
-	:custom
-	(indent-tabs-mode nil) ; do not use tabs for indentation
-	(fill-column 100)
-	(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
-	(browse-url-browser-function 'browse-url-default-browser))
+  :ensure nil ; Built-in
+  :hook ((org-mode . visual-line-mode)   ; soft-wrapping
+	 (org-mode . display-fill-column-indicator-mode)
+	 (org-mode . auto-fill-mode)
+	 (org-mode . (lambda () (company-mode -1))))
+  :config
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
+                                        ; Unbind C-' as it is used by avy
+  (define-key org-mode-map (kbd "C-'") nil)
+  :custom
+  (indent-tabs-mode nil) ; do not use tabs for indentation
+  (fill-column 100)
+  (visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+  (browse-url-browser-function 'browse-url-default-browser))
 
 (use-package evil-org
-	:after org
-	:hook (org-mode . (lambda () (evil-org-mode)))
-	:config
-	(require 'evil-org-agenda)
-	(evil-org-agenda-set-keys))
+  :after org
+  :hook (org-mode . (lambda () (evil-org-mode)))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 (use-package ultra-scroll
-	:ensure t
-	:init
-	(setq scroll-conservatively 3
-				scroll-margin 0)
-	:config
-	(ultra-scroll-mode 1))
+  :ensure t
+  :init
+  (setq scroll-conservatively 3
+	scroll-margin 0)
+  :config
+  (ultra-scroll-mode 1))
 
 ;; for claude code
 (use-package inheritenv :defer t
@@ -310,7 +322,7 @@
   ;; Optionally define a repeat map so that "M" will cycle thru Claude auto-accept/plan/confirm modes after invoking claude-code-cycle-mode / C-c M.
   :bind
   (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
-  
+
 ;; JSON indentation
 (use-package json-mode
   :custom
@@ -336,7 +348,7 @@
   :custom
   (eglot-autoshutdown t) ; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil) ; allow edits without confirmation
-)
+  )
 
 ;; auto-fill only comments in Literate Haskell file, not the code
 (defun my-literate-haskell-auto-fill ()
@@ -359,7 +371,7 @@
 (use-package avy
   :bind 
   ("C-'" . avy-goto-char-timer)
-)
+  )
 
 ;; I 
 (use-package verb
@@ -376,6 +388,14 @@
   :custom
   (olivetti-body-width 100))
 
+(use-package agent-shell
+  :ensure t
+  :defer t)
+
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
 ;; Factor
@@ -385,22 +405,22 @@
 
 ;; Lisp-mode: configure to not use tabs
 (add-hook 'lisp-mode-hook
-					(lambda ()
-						(disable-tabs)
-						(setq fill-column 80)
-						(display-fill-column-indicator-mode t)))
+	  (lambda ()
+	    (disable-tabs)
+	    (setq fill-column 80)
+	    (display-fill-column-indicator-mode t)))
 ;; (fci-mode t)))
 
 
 ;; Keybindings set using use-package for simplicity
 (use-package emacs
-	:ensure nil ; built in
-	:bind
-	(("<C-tab>" . other-window)
-	 ("C-c q" . persp-switch)
-	 ("C-x C-m" . execute-extended-command)
-	 ("C-x C-2" . toggle-frame-maximized)
-	 ("C-x m" . nil))) ; Unbind compose mail not to interfere with my org-mode stuff
+  :ensure nil ; built in
+  :bind
+  (("<C-tab>" . other-window)
+   ("C-c q" . persp-switch)
+   ("C-x C-m" . execute-extended-command)
+   ("C-x C-2" . toggle-frame-maximized)
+   ("C-x m" . nil))) ; Unbind compose mail not to interfere with my org-mode stuff
 
 ;; Mode settings
 ;; org-mode
@@ -436,8 +456,8 @@
 
 ;; Load private config if it exists
 (let ((private-file (expand-file-name "private.init.el" user-emacs-directory)))
-	(when (file-exists-p private-file)
-		(load-file private-file)))
+  (when (file-exists-p private-file)
+    (load-file private-file)))
 
 ;; Reset GC threshold after startup
 (add-hook 'emacs-startup-hook

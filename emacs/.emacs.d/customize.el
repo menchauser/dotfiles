@@ -8,57 +8,57 @@
  '(auto-save-visited-mode t)
  '(column-number-mode t)
  '(connection-local-criteria-alist
-	 '(((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
-		 ((:application tramp :machine "localhost") tramp-connection-local-darwin-ps-profile)
-		 ((:application tramp :machine "IB-MKARANASHEV-M") tramp-connection-local-darwin-ps-profile)
-		 ((:application tramp) tramp-connection-local-default-system-profile
-			tramp-connection-local-default-shell-profile)
-		 ((:application eshell) eshell-connection-default-profile)))
+   '(((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
+     ((:application tramp :machine "localhost") tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "IB-MKARANASHEV-M") tramp-connection-local-darwin-ps-profile)
+     ((:application tramp) tramp-connection-local-default-system-profile
+      tramp-connection-local-default-shell-profile)
+     ((:application eshell) eshell-connection-default-profile)))
  '(connection-local-profile-alist
-	 '((tramp-kubernetes-connection-local-default-profile
-			(tramp-config-check . tramp-kubernetes--current-context-data)
-			(tramp-extra-expand-args 97 (tramp-kubernetes--container (car tramp-current-connection)) 104
-															 (tramp-kubernetes--pod (car tramp-current-connection)) 120
-															 (tramp-kubernetes--context-namespace (car tramp-current-connection))))
-		 (tramp-connection-local-darwin-ps-profile
-			(tramp-process-attributes-ps-args "-acxww" "-o"
-																				"pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-																				"-o" "state=abcde" "-o"
-																				"ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
-			(tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
-																					(egid . number) (comm . 52) (state . 5) (ppid . number)
-																					(pgrp . number) (sess . number) (ttname . string)
-																					(tpgid . number) (minflt . number) (majflt . number)
-																					(time . tramp-ps-time) (pri . number) (nice . number)
-																					(vsize . number) (rss . number) (etime . tramp-ps-time)
-																					(pcpu . number) (pmem . number) (args)))
-		 (tramp-connection-local-busybox-ps-profile
-			(tramp-process-attributes-ps-args "-o"
-																				"pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-																				"-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
-			(tramp-process-attributes-ps-format (pid . number) (user . string) (group . string)
-																					(comm . 52) (state . 5) (ppid . number) (pgrp . number)
-																					(ttname . string) (time . tramp-ps-time) (nice . number)
-																					(etime . tramp-ps-time) (args)))
-		 (tramp-connection-local-bsd-ps-profile
-			(tramp-process-attributes-ps-args "-acxww" "-o"
-																				"pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-																				"-o"
-																				"state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
-			(tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
-																					(egid . number) (group . string) (comm . 52)
-																					(state . string) (ppid . number) (pgrp . number)
-																					(sess . number) (ttname . string) (tpgid . number)
-																					(minflt . number) (majflt . number) (time . tramp-ps-time)
-																					(pri . number) (nice . number) (vsize . number)
-																					(rss . number) (etime . number) (pcpu . number)
-																					(pmem . number) (args)))
-		 (tramp-connection-local-default-shell-profile (shell-file-name . "/bin/sh")
-																									 (shell-command-switch . "-c"))
-		 (tramp-connection-local-default-system-profile (path-separator . ":")
-																										(null-device . "/dev/null"))
-		 (eshell-connection-default-profile (eshell-path-env-list))))
- '(custom-enabled-themes '(eink))
+   '((tramp-kubernetes-connection-local-default-profile
+      (tramp-config-check . tramp-kubernetes--current-context-data)
+      (tramp-extra-expand-args 97 (tramp-kubernetes--container (car tramp-current-connection)) 104
+                               (tramp-kubernetes--pod (car tramp-current-connection)) 120
+                               (tramp-kubernetes--context-namespace (car tramp-current-connection))))
+     (tramp-connection-local-darwin-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o"
+                                        "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "-o" "state=abcde" "-o"
+                                        "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
+                                          (egid . number) (comm . 52) (state . 5) (ppid . number)
+                                          (pgrp . number) (sess . number) (ttname . string)
+                                          (tpgid . number) (minflt . number) (majflt . number)
+                                          (time . tramp-ps-time) (pri . number) (nice . number)
+                                          (vsize . number) (rss . number) (etime . tramp-ps-time)
+                                          (pcpu . number) (pmem . number) (args)))
+     (tramp-connection-local-busybox-ps-profile
+      (tramp-process-attributes-ps-args "-o"
+                                        "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format (pid . number) (user . string) (group . string)
+                                          (comm . 52) (state . 5) (ppid . number) (pgrp . number)
+                                          (ttname . string) (time . tramp-ps-time) (nice . number)
+                                          (etime . tramp-ps-time) (args)))
+     (tramp-connection-local-bsd-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o"
+                                        "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "-o"
+                                        "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
+                                          (egid . number) (group . string) (comm . 52)
+                                          (state . string) (ppid . number) (pgrp . number)
+                                          (sess . number) (ttname . string) (tpgid . number)
+                                          (minflt . number) (majflt . number) (time . tramp-ps-time)
+                                          (pri . number) (nice . number) (vsize . number)
+                                          (rss . number) (etime . number) (pcpu . number)
+                                          (pmem . number) (args)))
+     (tramp-connection-local-default-shell-profile (shell-file-name . "/bin/sh")
+                                                   (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile (path-separator . ":")
+                                                    (null-device . "/dev/null"))
+     (eshell-connection-default-profile (eshell-path-env-list))))
+ '(custom-enabled-themes '(modus-operandi-tinted))
  '(custom-safe-themes
    '("9514e1fd8816c5a1f92e149936adc48ed5f9f19e33255099a13be0ee60cc675e"
      "833ddce3314a4e28411edf3c6efde468f6f2616fc31e17a62587d6a9255f4633"
@@ -96,17 +96,38 @@
  '(org-log-done 'time)
  '(org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
  '(package-selected-packages
-   '(0blayout avy basic-theme benchmark-init claude-code company-ledger eat eink-theme elpy erlang
-              evil-ledger evil-org exec-path-from-shell find-file-in-project fuel fzf gptel
-              haskell-mode helm json-mode lsp-mode magit marginalia mcp org-bullets org-gcal
-              password-store persistent-scratch perspective phscroll pi-coding-agent projectile
-              rustic slime solarized-theme sweeprolog timu-spacegrey-theme ultra-scroll undo-fu
-              undo-tree verb vertico vterm zenburn-theme))
+   '(0blayout agent-shell avy basic-theme benchmark-init claude-code company-ledger consult eat
+              eink-theme elpy erlang evil-ledger evil-org exec-path-from-shell expand-region
+              find-file-in-project fuel fzf gptel haskell-mode helm json-mode lsp-mode magit
+              marginalia mcp olivetti org-bullets org-gcal ox-taskjuggler password-store
+              persistent-scratch perspective phscroll pi-coding-agent projectile rustic slime
+              solarized-theme sweeprolog timu-spacegrey-theme tj3-mode ultra-scroll undo-fu
+              undo-tree verb vertico vterm zenburn-theme zig-mode))
  '(package-vc-selected-packages
-   '((phscroll :vc-backend Git :url "https://github.com/misohena/phscroll")
+   '((ox-taskjuggler :url "https://github.com/h-oll/ox-taskjuggler" :branch "master" :main-file
+                     "ox-taskjuggler.el")
+     (phscroll :vc-backend Git :url "https://github.com/misohena/phscroll")
      (claude-code :url "https://github.com/stevemolitor/claude-code.el")))
  '(python-shell-interpreter "python3")
  '(safe-local-variable-directories '("/Users/mkaranashev/.emacs.d/"))
+ '(safe-local-variable-values
+   '((org-taskjuggler-valid-task-attributes account start note duration endbuffer endcredit end flags
+                                            journalentry length limits maxend maxstart minend
+                                            minstart period reference responsible scheduling
+                                            startbuffer startcredit statusnote chargeset charge)
+     (org-taskjuggler-valid-task-attributes account start note duration endbuffer endcredit end
+                                            flags journalentry length limits maxend maxstart minend
+                                            minstart period reference responsible scheduling
+                                            startbuffer startcredit statusnote chargeset charge
+                                            complete)
+     (org-taskjuggler-default-global-properties
+      . "leaves holiday 2026-05-01\12leaves holiday 2026-06-04\12leaves holiday 2026-06-22\12")
+     (org-taskjuggler-valid-project-attributes timingresolution timezone alertlevels currency
+                                               currencyformat dailyworkinghours extend
+                                               includejournalentry now numberformat outputdir
+                                               scenario shorttimeformat timeformat trackingscenario
+                                               weekstartsmonday weekstartssunday workinghours
+                                               yearlyworkingdays leaves)))
  '(scroll-bar-mode nil)
  '(solarized-scale-org-headlines t)
  '(solarized-use-less-bold t)
@@ -119,4 +140,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 140 :width normal :foundry "nil" :family "Iosevka SS04")))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#fbf7f0" :foreground "#000000" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 140 :width normal :foundry "nil" :family "Berkeley Mono")))))
