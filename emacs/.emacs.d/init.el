@@ -269,7 +269,21 @@
 		       :type string
 		       :optional t
 		       :description "Directory to search in (optional, defaults to current directory)"))
-   :category "filesystem"))
+   :category "filesystem")
+  (gptel-make-tool
+   :name "read_url"
+   :function (lambda (url)
+               (with-current-buffer (url-retrieve-synchronously url)
+                 (goto-char (point-min))
+                 (forward-paragraph)
+                 (let ((dom (libxml-parse-html-region (point) (point-max))))
+                   (run-at-time 0 nil #'kill-buffer (current-buffer))
+                   (with-temp-buffer
+                     (shr-insert-document dom)
+                     (buffer-substring-no-properties (point-min) (point-max))))))
+   :description "Fetch and read the contents of a URL"
+   :args (list '(:name "url" :type string :description "The URL to read"))
+   :category "web"))
 
 ;; Org-mode configuration. It is built-in so no need to ensure it
 (use-package org
@@ -282,6 +296,9 @@
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
                                         ; Unbind C-' as it is used by avy
   (define-key org-mode-map (kbd "C-'") nil)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell . t)))
   :custom
   (indent-tabs-mode nil) ; do not use tabs for indentation
   (fill-column 100)
@@ -463,3 +480,4 @@
 (add-hook 'emacs-startup-hook
           (lambda ()
             (setq gc-cons-threshold (* 16 1024 1024))))
+
