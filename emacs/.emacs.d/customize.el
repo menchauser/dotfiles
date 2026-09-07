@@ -95,19 +95,12 @@
  '(org-export-backends '(ascii html md odt))
  '(org-log-done 'time)
  '(org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
- '(package-selected-packages
-   '(0blayout agent-shell avy basic-theme benchmark-init claude-code company-ledger consult eat
-              eink-theme elpy erlang evil-ledger evil-org exec-path-from-shell expand-region
-              find-file-in-project fuel fzf gptel haskell-mode helm json-mode lsp-mode magit
-              marginalia mcp olivetti org-bullets org-gcal ox-taskjuggler password-store
-              persistent-scratch perspective phscroll pi-coding-agent projectile rustic slime
-              solarized-theme sweeprolog timu-spacegrey-theme tj3-mode ultra-scroll undo-fu
-              undo-tree verb vertico vterm zenburn-theme zig-mode))
+ '(package-selected-packages nil)
  '(package-vc-selected-packages
-   '((ox-taskjuggler :url "https://github.com/h-oll/ox-taskjuggler" :branch "master" :main-file
+   '((claude-code :url "https://github.com/stevemolitor/claude-code.el")
+     (ox-taskjuggler :url "https://github.com/h-oll/ox-taskjuggler" :branch "master" :main-file
                      "ox-taskjuggler.el")
-     (phscroll :vc-backend Git :url "https://github.com/misohena/phscroll")
-     (claude-code :url "https://github.com/stevemolitor/claude-code.el")))
+     (phscroll :vc-backend Git :url "https://github.com/misohena/phscroll")))
  '(python-shell-interpreter "python3")
  '(safe-local-variable-directories '("/Users/mkaranashev/.emacs.d/"))
  '(safe-local-variable-values

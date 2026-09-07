@@ -25,8 +25,7 @@
                          :alone 1000
                          :held  500 }}
 
-    :devices {:mbp2019  [{:vendor_id 1452 :product_id 832 :is_keyboard true}] 
-              :mbp2021  [{:vendor_id 1452 :product_id 834 :is_keyboard true}]
+    :devices {:apple    [{:vendor_id 1452 :is_keyboard true}] 
               :chad     [{:vendor_id 65261 :product_id 12384 :is_keyboard true}]
               :keychron [{:vendor_id 1452 :product_id 591 :is_keyboard true}]}
     
@@ -37,14 +36,14 @@
             :idea   ["^com\\.jetbrains\\.intellij$"]
     }
 
-    :input-sources {:en {:language "en"}
-                    :ru {:language "ru"}}
+    :input-sources {:en {:input_source_id "^com\\.apple\\.keylayout\\.USExtended$"}
+                    :ru {:input_source_id "^com\\.apple\\.keylayout\\.RussianWin$" }}
 
     :main [{:des "Caps Lock to Control"
-            :rules [[:##caps_lock :left_control [:mbp2019 :mbp2021 :keychron]]]},
+            :rules [[:##caps_lock :left_control [:!chad]]]},
 
            {:des "Ctrl + I to Backspace"
-            :rules [[:!T##i :delete_or_backspace [:mbp2019 :mbp2021 :keychron]]]},
+            :rules [[:!T##i :delete_or_backspace [:!chad]]]},
            ;; {:des "Cmd + H to Ctrl + H in Emacs"
            ;;  :rules [[:!Ch :!Th [:emacs]]]}
            
@@ -57,19 +56,19 @@
            {:des "Ctrl + ; to Enter"
             :rules [[:!Tsemicolon :return_or_enter [:!chad]]]}
 
-           {:des "Disable Backspace Key"
-            :rules [[:delete_or_backspace :vk_none [:mbp2019 :!emacs :!rdp]]]}
-           {:des "Disable Arrow Keys",
-            :rules [[:up_arrow    :vk_none [:mbp2019 :!emacs :!rdp]]
-                    [:left_arrow  :vk_none [:mbp2019 :!emacs :!rdp]]
-                    [:down_arrow  :vk_none [:mbp2019 :!emacs :!rdp]]
-                    [:right_arrow :vk_none [:mbp2019 :!emacs :!rdp]]]}
+           ;; {:des "Disable Backspace Key"
+           ;;  :rules [[:delete_or_backspace :vk_none [:mbp2019 :!emacs :!rdp]]]}
+           ;; {:des "Disable Arrow Keys",
+           ;;  :rules [[:up_arrow    :vk_none [:mbp2019 :!emacs :!rdp]]
+           ;;          [:left_arrow  :vk_none [:mbp2019 :!emacs :!rdp]]
+           ;;          [:down_arrow  :vk_none [:mbp2019 :!emacs :!rdp]]
+           ;;          [:right_arrow :vk_none [:mbp2019 :!emacs :!rdp]]]}
            {:des "Disable Minimize Key"
-            :rules [[:!Cm :vk_none [:mbp2019 :mbp2021 :chad]]]}
+            :rules [[:!Cm :vk_none]]}
 
            {:des "Left CMD to EN, Right CMD to RU"
-            :rules [[:##left_command :left_command [:mbp2019 :mbp2021 :chad] {:alone :en}]
-                    [:##right_command :right_command [:mbp2019 :mbp2021 :chad] {:alone :ru}]]}
+            :rules [[:##left_command :left_command nil {:alone :en}]
+                    [:##right_command :right_command nil {:alone :ru}]]}
 
            {:des "Disable Cmd-Q for all keyboards"
             :rules [[:!Cq :vk_none]]}
