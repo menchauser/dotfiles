@@ -125,13 +125,13 @@
   :config
   (which-key-mode +1))
 
-
+;; Projectile
 (use-package projectile
   :defer t 
   :init
-  (setq projectile-project-search-path '("~/p/infobip/"))
+  (setq projectile-project-search-path '("~/p . 1"))
   :bind-keymap
-  ("C-c p" . projectile-command-map)
+  ("s-p" . projectile-command-map)
   :config
   (projectile-mode +1))
 
@@ -345,23 +345,19 @@
   :custom
   (js-indent-level 2))
 
-;; Projectile
-(use-package projectile
-  :defer t
-  :bind-keymap
-  ("s-p" . projectile-command-map)
-  :config
-  (projectile-mode +1))
-
 ;; Haskell
 (use-package eglot
   :hook
   ((haskell-mode . eglot-ensure)
    (python-mode . eglot-ensure))
+  :bind (:map eglot-mode-map
+              ("C-c w" . eglot-rename)
+              ("C-c a" . eglot-code-actions))
   :config
   (setq-default eglot-workspace-configuration
                 '(:haskell (:plugin (:stan (:globalOn :json-false))    ; disable stan
-                                    :formattingProvider "fourmolu")))  ; use fourmolu instead of ormolu
+                                    :formattingProvider "fourmolu")
+                           :gopls (:staticcheck t :usePlaceholders t)))  ; use fourmolu instead of ormolu
   :custom
   (eglot-autoshutdown t) ; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil) ; allow edits without confirmation
@@ -412,6 +408,29 @@
 (use-package expand-region
   :ensure t
   :bind ("C-=" . er/expand-region))
+
+;; Go language support
+(setq treesit-language-source-alist
+      '((go "https://github.com/tree-sitter/tree-sitter-go" "v0.25.0")
+        (gomod "https://github.com/camdencheek/tree-sitter-go-mod")))
+
+(use-package go-ts-mode
+  :mode (("\\.go\\'" . go-ts-mode)
+         ("/go\\.mod\\'" . go-mod-ts-mode))
+  :hook ((go-ts-mode . eglot-ensure)
+         (go-ts-mode . my/go-setup))
+  :custom (go-ts-mode-indent-offset 4)
+  :config
+  (add-to-list 'exec-path
+               (expand-file-name "~/go/bin"))
+  (defun my/go-setup ()
+    (setq-local tab-width 4)
+    (add-hook 'before-save-hook #'my/go-before-save nil t))
+  (defun my/go-before-save ()
+    (when (eglot-managed-p)
+      (ignore-errors (call-interactively #'eglot-code-action-organize-imports))
+      (eglot-format-buffer))))
+
 
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
