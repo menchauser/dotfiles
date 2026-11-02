@@ -432,6 +432,16 @@
       (eglot-format-buffer))))
 
 
+;; Ghostel terminal 
+(use-package ghostel
+  :ensure t
+  :hook (after-init . ghostel-status-indicator-mode))
+
+(use-package evil-ghostel
+  :ensure t
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode))
+
 ;;;; USE-PACKAGE ENDS HERE ;;;;
 
 ;; Factor

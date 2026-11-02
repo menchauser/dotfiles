@@ -4,11 +4,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ada-indent 1)
+ '(agent-shell-show-cost-indicator t)
  '(auto-save-timeout 5)
  '(auto-save-visited-mode t)
  '(column-number-mode t)
  '(connection-local-criteria-alist
-   '(((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
+   '(((:application tramp :machine "nedopech") tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
      ((:application tramp :machine "localhost") tramp-connection-local-darwin-ps-profile)
      ((:application tramp :machine "IB-MKARANASHEV-M") tramp-connection-local-darwin-ps-profile)
      ((:application tramp) tramp-connection-local-default-system-profile
@@ -96,10 +98,11 @@
  '(org-log-done 'time)
  '(org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
  '(package-selected-packages
-   '(ada-ref-man agent-shell avy basic-theme claude-code company-emoji eat eink-theme elpy erlang
-                 evil-org exec-path-from-shell fill-column-indicator find-file-in-project fuel fzf
-                 gptel-quick haskell-mode helm hledger-mode j-mode json-mode ledger-mode lsp-mode
-                 magit marginalia olivetti password-store persistent-scratch perspective posframe
+   '(ada-ref-man agent-shell avy basic-theme claude-code company-emoji consult eat eink-theme elpy
+                 erlang evil-ghostel evil-org exec-path-from-shell expand-region
+                 fill-column-indicator find-file-in-project fuel fzf ghostel gptel-quick
+                 haskell-mode helm hledger-mode j-mode json-mode ledger-mode lsp-mode magit
+                 marginalia olivetti password-store persistent-scratch perspective posframe
                  projectile rustic slime solarized-theme sweeprolog ultra-scroll undo-fu undo-tree
                  uniquify-files use-package verb vertico vterm wisi zenburn-theme))
  '(package-vc-selected-packages
