@@ -1,7 +1,5 @@
 ;; (require 'benchmark-init)
 ;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
-;; Optimize startup
-(setq gc-cons-threshold most-positive-fixnum)
 
 ;; Set path for customization settings file
 (setq custom-file
@@ -10,26 +8,17 @@
   (with-temp-buffer (write-file custom-file)))
 (load-file custom-file)
 
-;; Hide tool bar
-(tool-bar-mode -1)
 
-;; Yes or No
-(fset 'yes-or-no-p 'y-or-n-p)
+;; Short answers for yes-or-no prompts
+(setq use-short-answers t)
 
-;; default font
-(set-face-attribute 'default nil :font "Berkeley Mono-14")
 
 ;; Use packages
+;; use-package ships with Emacs 30, so no need to install it separately.
 (require 'package)
 ;; Load packages from Melpa
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
-
-;; Install required package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t) ; avoid writing :ensure t everywhere
@@ -90,12 +79,9 @@
 ;; Route 'completion-at-point through Vertico 
 (use-package consult
   :config
-  (setq completion-in-region-function
-        (lambda (&rest args)
-          (apply (if vertico-mode
-                     #'consult-completion-in-region
-                   #'completion--in-region)
-                 args))))
+  ;; `consult-completion-in-region' itself falls back to the default
+  ;; completion UI when neither Vertico nor Icomplete is active.
+  (setq completion-in-region-function #'consult-completion-in-region))
 
 
 ;; Find File In Project
@@ -122,6 +108,7 @@
 
 ;; For better performance with projectile 
 (use-package which-key
+  :ensure nil
   :config
   (which-key-mode +1))
 
@@ -129,7 +116,7 @@
 (use-package projectile
   :defer t 
   :init
-  (setq projectile-project-search-path '("~/p . 1"))
+  (setq projectile-project-search-path '("~/p" . 1))
   :bind-keymap
   ("s-p" . projectile-command-map)
   :config
@@ -198,10 +185,9 @@
   :defer t
   :custom
   (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+  :hook (rustic-mode . electric-pair-local-mode)
   :config
-  (setq rustic-format-on-save t)
-  (add-hook 'rustic-mode-hook
-	    (lambda () (electric-pair-mode 1))))
+  (setq rustic-format-on-save t))
 
 (use-package sweeprolog :defer t)
 
@@ -230,7 +216,7 @@
                                                          :budget_tokens 10000))))
   ;; Use Claude by default
   (setq gptel-backend gptel-anthropic
-	gptel-model 'claude-sonnet-4-6)
+	gptel-model 'claude-opus-5-5)
   ;; Common settings
   (setq
    ;; Use org syntax
@@ -265,24 +251,27 @@
    :category "web"))
 
 ;; Org-mode configuration. It is built-in so no need to ensure it
+(defun my/org-setup ()
+  "Buffer-local settings for org-mode"
+  (setq-local indent-tabs-mode nil) ;; do not use tabs for indentation
+  (setq-local fill-column 100)
+  ;; visual-line-mode copies this into a buffer-local `fringe-indicator-alist` when it turns on
+  (setq-local visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+  (visual-line-mode 1)  ;; soft-wrapping
+  (display-fill-column-indicator-mode 1)
+  (auto-fill-mode 1)
+  (company-mode -1))
+
 (use-package org
   :ensure nil ; Built-in
-  :hook ((org-mode . visual-line-mode)   ; soft-wrapping
-	 (org-mode . display-fill-column-indicator-mode)
-	 (org-mode . auto-fill-mode)
-	 (org-mode . (lambda () (company-mode -1))))
+  :hook (org-mode . my/org-setup)
   :config
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
                                         ; Unbind C-' as it is used by avy
   (define-key org-mode-map (kbd "C-'") nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((shell . t)))
-  :custom
-  (indent-tabs-mode nil) ; do not use tabs for indentation
-  (fill-column 100)
-  (visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
-  (browse-url-browser-function 'browse-url-default-browser))
+   '((shell . t))))
 
 (use-package evil-org
   :after org
@@ -292,7 +281,6 @@
   (evil-org-agenda-set-keys))
 
 (use-package ultra-scroll
-  :ensure t
   :init
   (setq scroll-conservatively 3
 	scroll-margin 0)
@@ -326,6 +314,7 @@
 
 ;; Haskell
 (use-package eglot
+  :ensure nil
   :hook
   ((haskell-mode . eglot-ensure)
    (python-mode . eglot-ensure))
@@ -339,7 +328,7 @@
                            :gopls (:staticcheck t :usePlaceholders t)))  ; use fourmolu instead of ormolu
   :custom
   (eglot-autoshutdown t) ; shutdown language server after closing last file
-  (eglot-confirm-server-initiated-edits nil) ; allow edits without confirmation
+  (eglot-confirm-server-edits nil) ; allow edits without confirmation
   )
 
 ;; auto-fill only comments in Literate Haskell file, not the code
@@ -350,13 +339,13 @@
             (looking-at "^>"))
     (do-auto-fill)))
 
+(defun my/haskell-literate-setup ()
+  (auto-fill-mode 1)
+  (setq-local auto-fill-function #'my-literate-haskell-auto-fill))
+
 (use-package haskell-mode
   :hook ((haskell-mode . interactive-haskell-mode)
-         (literate-haskell-mode . interactive-haskell-mode)
-         (literate-haskell-mode . (lambda ()
-                                    (auto-fill-mode 1)
-                                    (setq-local auto-fill-function
-                                                #'my-literate-haskell-auto-fill))))
+         (haskell-literate-mode . my/haskell-literate-setup))
   :bind
   ("C-x C-h" . haskell-hoogle))
 
@@ -375,17 +364,14 @@
 
 ;; Nice reading experience with word wrapping
 (use-package olivetti
-  :ensure t
   :hook (markdown-mode . olivetti-mode)
   :custom
   (olivetti-body-width 100))
 
 (use-package agent-shell
-  :ensure t
   :defer t)
 
 (use-package expand-region
-  :ensure t
   :bind ("C-=" . er/expand-region))
 
 ;; Go language support
@@ -417,11 +403,9 @@
 
 ;; Ghostel terminal 
 (use-package ghostel
-  :ensure t
   :hook (after-init . ghostel-status-indicator-mode))
 
 (use-package evil-ghostel
-  :ensure t
   :after (ghostel evil)
   :hook (ghostel-mode . evil-ghostel-mode))
 
@@ -491,7 +475,8 @@ current line, or nil if point is not inside one."
    ("C-x C-2" . toggle-frame-maximized)
    ("C-c i p" . my/insert-ipa)
    ("C-x m" . nil))  ; Unbind compose mail not to interfere with my org-mode stuff
-) 
+  :custom
+  (browse-url-browser-function 'browse-url-default-browser)) 
 
 ;; Mode settings
 ;; org-mode
@@ -530,8 +515,4 @@ current line, or nil if point is not inside one."
   (when (file-exists-p private-file)
     (load-file private-file)))
 
-;; Reset GC threshold after startup
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (* 16 1024 1024))))
 

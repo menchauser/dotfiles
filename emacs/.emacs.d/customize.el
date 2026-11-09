@@ -85,13 +85,10 @@
      "f5b6be56c9de9fd8bdd42e0c05fecb002dedb8f48a5f00e769370e4517dde0e8"
      "4c56af497ddf0e30f65a7232a8ee21b3d62a8c332c6b268c81e9ea99b11da0d3"
      "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" default))
- '(default-frame-alist '((vertical-scroll-bars) (undecorated . t)))
  '(display-line-numbers-type 'relative)
- '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
  '(epg-pinentry-mode 'loopback)
  '(global-display-line-numbers-mode t)
  '(inhibit-startup-screen t)
- '(initial-frame-alist '((vertical-scroll-bars) (fullscreen . maximized)))
  '(ns-alternate-modifier 'super)
  '(ns-command-modifier 'meta)
  '(ns-right-alternate-modifier 'none)
@@ -133,7 +130,6 @@
  '(solarized-scale-org-headlines t)
  '(solarized-use-less-bold t)
  '(tab-width 8)
- '(tool-bar-mode nil)
  '(warning-suppress-log-types '((comp) (comp) (comp)))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
