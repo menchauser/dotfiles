@@ -250,27 +250,6 @@
   (require 'gptel-integrations)
   ;; Custom Tools
   (gptel-make-tool
-   :name "find_files"
-   :function (lambda (pattern &optional directory)
-	       "Find files matching PATTERN in DIRECTORY (default: current dir)"
-	       (let* ((dir (or directory default-directory))
-		      (cmd (format "find %s -type f -name '%s' 2>/dev/null"
-				   (shell-quote-argument dir)
-				   pattern))
-		      (results (shell-command-to-string cmd)))
-		 (if (string-empty-p results)
-		     (format "No files found matching '%s' in %s" pattern dir)
-		   results)))
-   :description "Find files by pattern in a directory. Use shell wildcards like *.el or test*.txt"
-   :args (list '(:name "pattern"
-		       :type string
-		       :description "File pattern to search for (e.g., '*.el', 'test*.txt')")
-	       '(:name "directory"
-		       :type string
-		       :optional t
-		       :description "Directory to search in (optional, defaults to current directory)"))
-   :category "filesystem")
-  (gptel-make-tool
    :name "read_url"
    :function (lambda (url)
                (with-current-buffer (url-retrieve-synchronously url)

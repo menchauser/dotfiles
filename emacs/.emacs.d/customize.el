@@ -88,6 +88,7 @@
  '(default-frame-alist '((vertical-scroll-bars) (undecorated . t)))
  '(display-line-numbers-type 'relative)
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
+ '(epg-pinentry-mode 'loopback)
  '(global-display-line-numbers-mode t)
  '(inhibit-startup-screen t)
  '(initial-frame-alist '((vertical-scroll-bars) (fullscreen . maximized)))
