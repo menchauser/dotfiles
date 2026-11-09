@@ -457,6 +457,46 @@
 	    (display-fill-column-indicator-mode t)))
 ;; (fci-mode t)))
 
+;; Custom IPA enter via minibuffer
+(defun my/insert-ipa ()
+  "Enter IPA via minibuffer with the ipa-x-sampa input method.
+If point is inside an existing [IPA] block, edit its contents;
+otherwise insert a new [IPA] block."
+  (interactive)
+  (let ((bounds (my--ipa-block-bounds)))
+    (if bounds
+        (let* ((beg (car bounds))
+               (end (cdr bounds))
+               (new (my--read-ipa "IPA: " (buffer-substring-no-properties beg end))))
+          (delete-region beg end)
+          (goto-char beg)
+          (insert new))
+      (insert "[" (my--read-ipa "IPA: " nil) "]"))))
+
+(defun my--read-ipa (prompt initial)
+  "Read an IPA string with PROMPT and INITIAL input, using ipa-x-sampa."
+  (minibuffer-with-setup-hook
+      (lambda () (set-input-method "ipa-x-sampa"))
+    (read-string prompt initial)))
+
+(defun my--ipa-block-bounds ()
+  "Return (BEG . END) of the contents of the [ ] pair around point on the
+current line, or nil if point is not inside one."
+  (let* ((pt (point))
+         (open (save-excursion
+                 ;; nearest [ before point, not closed before point
+                 (when (and (search-backward "[" (line-beginning-position) t)
+                            (not (search-forward "]" pt t)))
+                   (point))))
+         (close (and open
+                     (save-excursion
+                       (goto-char pt)
+                       ;; nearest ] after point, with no [ in between
+                       (when (and (search-forward "]" (line-end-position) t)
+                                  (not (search-backward "[" pt t)))
+                         (point))))))
+    (when (and open close)
+      (cons (1+ open) (1- close)))))
 
 ;; Keybindings set using use-package for simplicity
 (use-package emacs
@@ -466,7 +506,9 @@
    ("C-c q" . persp-switch)
    ("C-x C-m" . execute-extended-command)
    ("C-x C-2" . toggle-frame-maximized)
-   ("C-x m" . nil))) ; Unbind compose mail not to interfere with my org-mode stuff
+   ("C-c i p" . my/insert-ipa)
+   ("C-x m" . nil))  ; Unbind compose mail not to interfere with my org-mode stuff
+) 
 
 ;; Mode settings
 ;; org-mode
