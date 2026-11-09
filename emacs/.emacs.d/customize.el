@@ -98,13 +98,11 @@
  '(org-log-done 'time)
  '(org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
  '(package-selected-packages
-   '(ada-ref-man agent-shell avy basic-theme claude-code company-emoji consult eat eink-theme elpy
-                 erlang evil-ghostel evil-org exec-path-from-shell expand-region
-                 fill-column-indicator find-file-in-project fuel fzf ghostel gptel-quick
-                 haskell-mode helm hledger-mode j-mode json-mode ledger-mode lsp-mode magit
-                 marginalia olivetti password-store persistent-scratch perspective posframe
-                 projectile rustic slime solarized-theme sweeprolog ultra-scroll undo-fu undo-tree
-                 uniquify-files use-package verb vertico vterm wisi zenburn-theme))
+   '(agent-shell avy basic-theme claude-code company consult eat eink-theme erlang evil-ghostel
+                 evil-org exec-path-from-shell expand-region find-file-in-project fuel fzf gptel
+                 haskell-mode json-mode lsp-mode magit marginalia olivetti password-store
+                 persistent-scratch perspective projectile rustic slime solarized-theme sweeprolog
+                 ultra-scroll undo-fu verb vertico vterm yaml-pro yasnippet zenburn-theme))
  '(package-vc-selected-packages
    '((claude-code :url "https://github.com/stevemolitor/claude-code.el")
      (ox-taskjuggler :url "https://github.com/h-oll/ox-taskjuggler" :branch "master" :main-file

@@ -412,7 +412,11 @@
 ;; Go language support
 (setq treesit-language-source-alist
       '((go "https://github.com/tree-sitter/tree-sitter-go" "v0.25.0")
-        (gomod "https://github.com/camdencheek/tree-sitter-go-mod")))
+        (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
+        ;; ikatyang/tree-sitter-yaml is archived; this fork is the maintained
+        ;; one (also what nvim-treesitter builds), and it matches yaml-ts-mode's
+        ;; queries shipped with Emacs 30.
+        (yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml")))
 
 (use-package go-ts-mode
   :mode (("\\.go\\'" . go-ts-mode)
