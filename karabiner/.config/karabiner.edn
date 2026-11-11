@@ -37,7 +37,8 @@
     }
 
     :input-sources {:en {:input_source_id "^com\\.apple\\.keylayout\\.USExtended$"}
-                    :ru {:input_source_id "^com\\.apple\\.keylayout\\.RussianWin$" }}
+                    :ru {:input_source_id "^com\\.apple\\.keylayout\\.RussianWin$" }
+                    :hr {:input_source_id "^com\\.apple\\.keylayout\\.Croatian$"}}
 
     :main [{:des "Caps Lock to Control"
             :rules [[:##caps_lock :left_control [:!chad]]]},
@@ -66,9 +67,10 @@
            {:des "Disable Minimize Key"
             :rules [[:!Cm :vk_none]]}
 
-           {:des "Left CMD to EN, Right CMD to RU"
+           {:des "Left CMD to EN, Right CMD to RU, Left Option to HR"
             :rules [[:##left_command :left_command nil {:alone :en}]
-                    [:##right_command :right_command nil {:alone :ru}]]}
+                    [:##right_command :right_command nil {:alone :ru}]
+                    [:##left_option :left_option nil {:alone :hr}]]}
 
            {:des "Disable Cmd-Q for all keyboards"
             :rules [[:!Cq :vk_none]]}

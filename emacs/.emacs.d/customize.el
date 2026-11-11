@@ -9,56 +9,99 @@
  '(auto-save-visited-mode t)
  '(column-number-mode t)
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "nedopech") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
-     ((:application tramp :machine "localhost") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "IB-MKARANASHEV-M") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp) tramp-connection-local-default-system-profile
+   '(((:application tramp :machine "nedopech")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :protocol "kubernetes")
+      tramp-kubernetes-connection-local-default-profile)
+     ((:application tramp :machine "localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "IB-MKARANASHEV-M")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp)
+      tramp-connection-local-default-system-profile
       tramp-connection-local-default-shell-profile)
      ((:application eshell) eshell-connection-default-profile)))
  '(connection-local-profile-alist
    '((tramp-kubernetes-connection-local-default-profile
       (tramp-config-check . tramp-kubernetes--current-context-data)
-      (tramp-extra-expand-args 97 (tramp-kubernetes--container (car tramp-current-connection)) 104
-                               (tramp-kubernetes--pod (car tramp-current-connection)) 120
-                               (tramp-kubernetes--context-namespace (car tramp-current-connection))))
+      (tramp-extra-expand-args 97
+			       (tramp-kubernetes--container
+				(car tramp-current-connection))
+			       104
+			       (tramp-kubernetes--pod
+				(car tramp-current-connection))
+			       120
+			       (tramp-kubernetes--context-namespace
+				(car tramp-current-connection))))
      (tramp-connection-local-darwin-ps-profile
       (tramp-process-attributes-ps-args "-acxww" "-o"
-                                        "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                        "-o" "state=abcde" "-o"
-                                        "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
-                                          (egid . number) (comm . 52) (state . 5) (ppid . number)
-                                          (pgrp . number) (sess . number) (ttname . string)
-                                          (tpgid . number) (minflt . number) (majflt . number)
-                                          (time . tramp-ps-time) (pri . number) (nice . number)
-                                          (vsize . number) (rss . number) (etime . tramp-ps-time)
-                                          (pcpu . number) (pmem . number) (args)))
+					"pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					"-o" "state=abcde" "-o"
+					"ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format (pid . number)
+					  (euid . number)
+					  (user . string)
+					  (egid . number) (comm . 52)
+					  (state . 5) (ppid . number)
+					  (pgrp . number)
+					  (sess . number)
+					  (ttname . string)
+					  (tpgid . number)
+					  (minflt . number)
+					  (majflt . number)
+					  (time . tramp-ps-time)
+					  (pri . number)
+					  (nice . number)
+					  (vsize . number)
+					  (rss . number)
+					  (etime . tramp-ps-time)
+					  (pcpu . number)
+					  (pmem . number) (args)))
      (tramp-connection-local-busybox-ps-profile
       (tramp-process-attributes-ps-args "-o"
-                                        "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                        "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
-      (tramp-process-attributes-ps-format (pid . number) (user . string) (group . string)
-                                          (comm . 52) (state . 5) (ppid . number) (pgrp . number)
-                                          (ttname . string) (time . tramp-ps-time) (nice . number)
-                                          (etime . tramp-ps-time) (args)))
+					"pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					"-o" "stat=abcde" "-o"
+					"ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format (pid . number)
+					  (user . string)
+					  (group . string) (comm . 52)
+					  (state . 5) (ppid . number)
+					  (pgrp . number)
+					  (ttname . string)
+					  (time . tramp-ps-time)
+					  (nice . number)
+					  (etime . tramp-ps-time)
+					  (args)))
      (tramp-connection-local-bsd-ps-profile
       (tramp-process-attributes-ps-args "-acxww" "-o"
-                                        "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                        "-o"
-                                        "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
-                                          (egid . number) (group . string) (comm . 52)
-                                          (state . string) (ppid . number) (pgrp . number)
-                                          (sess . number) (ttname . string) (tpgid . number)
-                                          (minflt . number) (majflt . number) (time . tramp-ps-time)
-                                          (pri . number) (nice . number) (vsize . number)
-                                          (rss . number) (etime . number) (pcpu . number)
-                                          (pmem . number) (args)))
-     (tramp-connection-local-default-shell-profile (shell-file-name . "/bin/sh")
-                                                   (shell-command-switch . "-c"))
-     (tramp-connection-local-default-system-profile (path-separator . ":")
-                                                    (null-device . "/dev/null"))
+					"pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+					"-o"
+					"state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format (pid . number)
+					  (euid . number)
+					  (user . string)
+					  (egid . number)
+					  (group . string) (comm . 52)
+					  (state . string)
+					  (ppid . number)
+					  (pgrp . number)
+					  (sess . number)
+					  (ttname . string)
+					  (tpgid . number)
+					  (minflt . number)
+					  (majflt . number)
+					  (time . tramp-ps-time)
+					  (pri . number)
+					  (nice . number)
+					  (vsize . number)
+					  (rss . number)
+					  (etime . number)
+					  (pcpu . number)
+					  (pmem . number) (args)))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh") (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":") (null-device . "/dev/null"))
      (eshell-connection-default-profile (eshell-path-env-list))))
  '(custom-enabled-themes '(modus-operandi-tinted))
  '(custom-safe-themes
@@ -84,7 +127,8 @@
      "a3e99dbdaa138996bb0c9c806bc3c3c6b4fd61d6973b946d750b555af8b7555b"
      "f5b6be56c9de9fd8bdd42e0c05fecb002dedb8f48a5f00e769370e4517dde0e8"
      "4c56af497ddf0e30f65a7232a8ee21b3d62a8c332c6b268c81e9ea99b11da0d3"
-     "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" default))
+     "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358"
+     default))
  '(display-line-numbers-type 'relative)
  '(epg-pinentry-mode 'loopback)
  '(global-display-line-numbers-mode t)
@@ -96,36 +140,61 @@
  '(org-log-done 'time)
  '(org-todo-keywords '((sequence "TODO" "IN PROGRESS" "|" "DONE")))
  '(package-selected-packages
-   '(agent-shell avy basic-theme claude-code company consult eat eink-theme erlang evil-ghostel
-                 evil-org exec-path-from-shell expand-region find-file-in-project fuel fzf gptel
-                 haskell-mode json-mode lsp-mode magit marginalia olivetti password-store
-                 persistent-scratch perspective projectile rustic slime solarized-theme sweeprolog
-                 ultra-scroll undo-fu verb vertico vterm yaml-pro yasnippet zenburn-theme))
+   '(agent-shell avy basic-theme claude-code company consult eat
+		 eink-theme erlang evil-ghostel evil-org
+		 exec-path-from-shell expand-region
+		 find-file-in-project fuel fzf gptel haskell-mode
+		 json-mode lsp-mode magit marginalia olivetti org-roam
+		 password-store persistent-scratch perspective
+		 projectile rustic slime solarized-theme sweeprolog
+		 ultra-scroll undo-fu verb vertico vterm yaml-pro
+		 yasnippet zenburn-theme))
  '(package-vc-selected-packages
    '((claude-code :url "https://github.com/stevemolitor/claude-code.el")
-     (ox-taskjuggler :url "https://github.com/h-oll/ox-taskjuggler" :branch "master" :main-file
-                     "ox-taskjuggler.el")
-     (phscroll :vc-backend Git :url "https://github.com/misohena/phscroll")))
+     (ox-taskjuggler :url "https://github.com/h-oll/ox-taskjuggler"
+		     :branch "master" :main-file "ox-taskjuggler.el")
+     (phscroll :vc-backend Git :url
+	       "https://github.com/misohena/phscroll")))
  '(python-shell-interpreter "python3")
  '(safe-local-variable-directories '("/Users/mkaranashev/.emacs.d/"))
  '(safe-local-variable-values
-   '((org-taskjuggler-valid-task-attributes account start note duration endbuffer endcredit end flags
-                                            journalentry length limits maxend maxstart minend
-                                            minstart period reference responsible scheduling
-                                            startbuffer startcredit statusnote chargeset charge)
-     (org-taskjuggler-valid-task-attributes account start note duration endbuffer endcredit end
-                                            flags journalentry length limits maxend maxstart minend
-                                            minstart period reference responsible scheduling
-                                            startbuffer startcredit statusnote chargeset charge
-                                            complete)
+   '((org-taskjuggler-valid-task-attributes account start note duration
+					    endbuffer endcredit end
+					    flags journalentry length
+					    limits maxend maxstart
+					    minend minstart period
+					    reference responsible
+					    scheduling startbuffer
+					    startcredit statusnote
+					    chargeset charge)
+     (org-taskjuggler-valid-task-attributes account start note
+					    duration endbuffer
+					    endcredit end flags
+					    journalentry length limits
+					    maxend maxstart minend
+					    minstart period reference
+					    responsible scheduling
+					    startbuffer startcredit
+					    statusnote chargeset
+					    charge complete)
      (org-taskjuggler-default-global-properties
       . "leaves holiday 2026-05-01\12leaves holiday 2026-06-04\12leaves holiday 2026-06-22\12")
-     (org-taskjuggler-valid-project-attributes timingresolution timezone alertlevels currency
-                                               currencyformat dailyworkinghours extend
-                                               includejournalentry now numberformat outputdir
-                                               scenario shorttimeformat timeformat trackingscenario
-                                               weekstartsmonday weekstartssunday workinghours
-                                               yearlyworkingdays leaves)))
+     (org-taskjuggler-valid-project-attributes timingresolution
+					       timezone alertlevels
+					       currency currencyformat
+					       dailyworkinghours
+					       extend
+					       includejournalentry now
+					       numberformat outputdir
+					       scenario
+					       shorttimeformat
+					       timeformat
+					       trackingscenario
+					       weekstartsmonday
+					       weekstartssunday
+					       workinghours
+					       yearlyworkingdays
+					       leaves)))
  '(scroll-bar-mode nil)
  '(solarized-scale-org-headlines t)
  '(solarized-use-less-bold t)
