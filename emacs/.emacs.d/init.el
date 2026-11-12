@@ -67,14 +67,33 @@
 ;; Let's use Vertico instead
 (use-package vertico
   :custom
-  ((completion-ignore-case t)
-   (read-buffer-completion-ignore-case t))
+  (completion-ignore-case t)
+  (read-buffer-completion-ignore-case t)
+  (vertico-preselect 'prompt)
+  (vertico-cycle t)
+  (vertico-count 10)
+  (vertico-resize t)
   :config
   (vertico-mode 1))
 
+(use-package vertico-directory
+  :ensure nil
+  :after vertico
+  :bind (:map vertico-map 
+	      ("RET" . vertico-directory-enter)
+	      ("DEL" . vertico-directory-delete-char)
+	      ("M-DEL" . vertico-directory-delete-word))
+  :hook
+  (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
 (use-package marginalia
+  :bind
+  (:map minibuffer-local-map
+        ("M-A" . marginalia-cycle))
+  :custom
+  (marginalia-align 'right)
   :config
-  (marginalia-mode))
+  (marginalia-mode 1))
 
 ;; Route 'completion-at-point through Vertico 
 (use-package consult
@@ -82,7 +101,6 @@
   ;; `consult-completion-in-region' itself falls back to the default
   ;; completion UI when neither Vertico nor Icomplete is active.
   (setq completion-in-region-function #'consult-completion-in-region))
-
 
 ;; Find File In Project
 (use-package find-file-in-project)
