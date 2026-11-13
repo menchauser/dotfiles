@@ -70,7 +70,7 @@
            {:des "Left CMD to EN, Right CMD to RU, Left Option to HR"
             :rules [[:##left_command :left_command nil {:alone :en}]
                     [:##right_command :right_command nil {:alone :ru}]
-                    [:##left_option :left_option nil {:alone :hr}]]}
+                    [:##right_option :right_option nil {:alone :hr}]]}
 
            {:des "Disable Cmd-Q for all keyboards"
             :rules [[:!Cq :vk_none]]}
