@@ -19,4 +19,6 @@
 
 (setq default-frame-alist
       '((vertical-scroll-bars)
-        (undecorated . t)))
+        (undecorated . t)
+	(font . "Berkeley Mono-14") ;; We place font here to avoid flickering later when frame is displayed
+	)) 

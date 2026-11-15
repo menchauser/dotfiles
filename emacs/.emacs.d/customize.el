@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -9,7 +11,24 @@
  '(auto-save-visited-mode t)
  '(column-number-mode t)
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "nedopech")
+   '(((:application vc-git) vc-git-connection-default-profile)
+     ((:application tramp :machine "ipv6-loopback")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "ipv6-localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "ip6-loopback")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "ip6-localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "localhost6")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "localhost4")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "::1")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "127.0.0.1")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "nedopech")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp :protocol "kubernetes")
       tramp-kubernetes-connection-local-default-profile)
@@ -22,7 +41,8 @@
       tramp-connection-local-default-shell-profile)
      ((:application eshell) eshell-connection-default-profile)))
  '(connection-local-profile-alist
-   '((tramp-kubernetes-connection-local-default-profile
+   '((vc-git-connection-default-profile (vc-git--program-version))
+     (tramp-kubernetes-connection-local-default-profile
       (tramp-config-check . tramp-kubernetes--current-context-data)
       (tramp-extra-expand-args 97
 			       (tramp-kubernetes--container
@@ -101,7 +121,8 @@
      (tramp-connection-local-default-shell-profile
       (shell-file-name . "/bin/sh") (shell-command-switch . "-c"))
      (tramp-connection-local-default-system-profile
-      (path-separator . ":") (null-device . "/dev/null"))
+      (path-separator . ":") (null-device . "/dev/null")
+      (exec-suffixes ""))
      (eshell-connection-default-profile (eshell-path-env-list))))
  '(custom-enabled-themes '(modus-operandi-tinted))
  '(custom-safe-themes
@@ -206,4 +227,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#fbf7f0" :foreground "#000000" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 140 :width normal :foundry "nil" :family "Berkeley Mono")))))
+ '(default ((t nil))))
