@@ -49,6 +49,21 @@
   (add-to-list 'org-latex-packages-alist '("" "amssymb" t ("xelatex" "lualatex")))
   ;; org emits lstlisting environments for the listings backend but doesn't load the package
   (add-to-list 'org-latex-packages-alist '("" "listings"))
+  ;; fontspec alone leaves XeTeX on Latin Modern, which has no Greek or Cyrillic:
+  ;; those letters silently vanish from the PDF.  Libertinus covers polytonic
+  ;; Greek, Cyrillic, Croatian and IPA, but its mono face has no Greek or
+  ;; Cyrillic, hence DejaVu.  All of them ship in tectonic's bundle, so no
+  ;; system install is needed.  Guarded because LaTeX snippet previews get
+  ;; this header too, without fontspec.
+  (add-to-list 'org-latex-packages-alist
+               (string-join
+                '("\\ifdefined\\setmainfont"
+                  "\\setmainfont{LibertinusSerif}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]"
+                  "\\setsansfont{LibertinusSans}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic]"
+                  "\\setmonofont{DejaVuSansMono}[Extension=.ttf, UprightFont=*, BoldFont=*-Bold, ItalicFont=*-Oblique, BoldItalicFont=*-BoldOblique, Scale=MatchLowercase]"
+                  "\\fi")
+                "\n")
+               t)
 
   (defun my/org-export-pdf-async ()
     "Export the buffer to LaTeX, then compile it to PDF without blocking Emacs.
